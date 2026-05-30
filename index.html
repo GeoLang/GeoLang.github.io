@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GeoLang — Enterprise GIS Platform</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#0a0a0f;--card:#12121a;--border:#1e1e2e;--accent:#6c5ce7;--accent2:#00cec9;--text:#e0e0e0;--muted:#888}
+body{font-family:system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--text);line-height:1.6}
+a{color:var(--accent2);text-decoration:none}
+a:hover{text-decoration:underline}
+
+.hero{text-align:center;padding:6rem 2rem 4rem;background:linear-gradient(135deg,#0a0a1a 0%,#1a1030 50%,#0a1a1a 100%)}
+.hero h1{font-size:3rem;font-weight:800;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero p{font-size:1.2rem;color:var(--muted);margin-top:1rem;max-width:600px;margin-inline:auto}
+.hero .tagline{font-size:1.5rem;color:var(--text);margin-top:.5rem}
+
+.section{max-width:1200px;margin:0 auto;padding:3rem 2rem}
+.section h2{font-size:1.8rem;margin-bottom:2rem;color:var(--text)}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1.5rem}
+.card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.5rem;transition:border-color .2s}
+.card:hover{border-color:var(--accent)}
+.card h3{font-size:1.1rem;margin-bottom:.5rem}
+.card .desc{color:var(--muted);font-size:.9rem;margin-bottom:1rem}
+.card .links{display:flex;gap:1rem;font-size:.85rem}
+.badge{display:inline-block;background:var(--accent);color:#fff;font-size:.7rem;padding:.15rem .5rem;border-radius:4px;margin-left:.5rem;vertical-align:middle}
+
+.category{margin-bottom:3rem}
+.category h3{font-size:1.1rem;color:var(--accent2);margin-bottom:1rem;text-transform:uppercase;letter-spacing:.1em;font-weight:600}
+
+footer{text-align:center;padding:3rem 2rem;color:var(--muted);font-size:.85rem;border-top:1px solid var(--border)}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <h1>GeoLang</h1>
+  <p class="tagline">Enterprise GIS. Natural Language.</p>
+  <p>A modular geospatial platform — 19 open-source Rust libraries for tile serving, routing, geocoding, data pipelines, and AI-powered spatial analysis.</p>
+</div>
+
+<div class="section">
+  <h2>Platform Components</h2>
+
+  <div class="category">
+    <h3>Core Services</h3>
+    <div class="grid">
+      <div class="card">
+        <h3>TileTopia</h3>
+        <div class="desc">High-performance vector &amp; raster tile server with PostGIS, MBTiles, PMTiles, and GeoPackage support.</div>
+        <div class="links"><a href="https://github.com/GeoLang/tiletopia">GitHub</a> <a href="https://geolang.github.io/tiletopia">Docs</a></div>
+      </div>
+      <div class="card">
+        <h3>ViewTopia</h3>
+        <div class="desc">Web-based map viewer with layer management, styling, and real-time collaboration.</div>
+        <div class="links"><a href="https://github.com/GeoLang/viewtopia">GitHub</a> <a href="https://geolang.github.io/viewtopia">Docs</a></div>
+      </div>
+      <div class="card">
+        <h3>Ptolemy</h3>
+        <div class="desc">Versioned geospatial feature store with branching, geoprocessing, and format import.</div>
+        <div class="links"><a href="https://github.com/GeoLang/ptolemy">GitHub</a> <a href="https://geolang.github.io/ptolemy">Docs</a></div>
+      </div>
+      <div class="card">
+        <h3>GeoLang Agent<span class="badge">AI</span></h3>
+        <div class="desc">Natural language interface to the entire platform. Powered by Letta persistence and Grok.</div>
+        <div class="links"><a href="https://github.com/GeoLang/geolang">GitHub</a></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="category">
+    <h3>Routing &amp; Geocoding</h3>
+    <div class="grid">
+      <div class="card">
+        <h3>Itinera</h3>
+        <div class="desc">Multi-modal routing engine with contraction hierarchies, isochrones, and turn-by-turn navigation.</div>
+        <div class="links"><a href="https://github.com/GeoLang/itinera">GitHub</a> <a href="https://geolang.github.io/itinera">Docs</a></div>
+      </div>
+      <div class="card">
+        <h3>Geokode</h3>
+        <div class="desc">Geocoding and reverse geocoding service with address parsing and fuzzy matching.</div>
+        <div class="links"><a href="https://github.com/GeoLang/geokode">GitHub</a> <a href="https://geolang.github.io/geokode">Docs</a></div>
+      </div>
+      <div class="card">
+        <h3>Interiora</h3>
+        <div class="desc">Indoor mapping SDK — venue models, floor plans, graph-based routing, and BLE/WiFi positioning.</div>
+        <div class="links"><a href="https://github.com/GeoLang/interiora">GitHub</a> <a href="https://geolang.github.io/interiora">Docs</a></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="category">
+    <h3>Data Processing</h3>
+    <div class="grid">
+      <div class="card">
+        <h3>Geodukt</h3>
+        <div class="desc">Geospatial data pipeline and format conversion toolkit with plugin architecture.</div>
+        <div class="links"><a href="https://github.com/GeoLang/geodukt">GitHub</a> <a href="https://geolang.github.io/geodukt">Docs</a></div>
+      </div>
+      <div class="card">
+        <h3>Collecta</h3>
+        <div class="desc">Field data collection — offline-first forms, GPS tracking, photo capture, and sync.</div>
+        <div class="links"><a href="https://github.com/GeoLang/collecta">GitHub</a> <a href="https://geolang.github.io/collecta">Docs</a></div>
+      </div>
+      <div class="card">
+        <h3>Nubis</h3>
+        <div class="desc">Point cloud processing for LiDAR data — filtering, classification, and surface generation.</div>
+        <div class="links"><a href="https://github.com/GeoLang/nubis">GitHub</a> <a href="https://geolang.github.io/nubis">Docs</a></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="category">
+    <h3>Analysis &amp; Visualization</h3>
+    <div class="grid">
+      <div class="card">
+        <h3>Terrano</h3>
+        <div class="desc">Terrain analysis — elevation profiles, slope, aspect, viewshed, and hillshade generation.</div>
+        <div class="links"><a href="https://github.com/GeoLang/terrano">GitHub</a> <a href="https://geolang.github.io/terrano">Docs</a></div>
+      </div>
+      <div class="card">
+        <h3>Fluvius</h3>
+        <div class="desc">Hydrological analysis — watershed delineation, flow accumulation, and stream networks.</div>
+        <div class="links"><a href="https://github.com/GeoLang/fluvius">GitHub</a> <a href="https://geolang.github.io/fluvius">Docs</a></div>
+      </div>
+      <div class="card">
+        <h3>Panoptes</h3>
+        <div class="desc">Geospatial monitoring and change detection from satellite and aerial imagery.</div>
+        <div class="links"><a href="https://github.com/GeoLang/panoptes">GitHub</a> <a href="https://geolang.github.io/panoptes">Docs</a></div>
+      </div>
+      <div class="card">
+        <h3>Topoi</h3>
+        <div class="desc">Topology engine — polygon cleaning, gap/overlap detection, and network topology.</div>
+        <div class="links"><a href="https://github.com/GeoLang/topoi">GitHub</a> <a href="https://geolang.github.io/topoi">Docs</a></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="category">
+    <h3>Infrastructure</h3>
+    <div class="grid">
+      <div class="card">
+        <h3>Projicio</h3>
+        <div class="desc">Coordinate reference system transformations and projection management.</div>
+        <div class="links"><a href="https://github.com/GeoLang/projicio">GitHub</a> <a href="https://geolang.github.io/projicio">Docs</a></div>
+      </div>
+      <div class="card">
+        <h3>Fenestra</h3>
+        <div class="desc">Spatial indexing — R-tree, quadtree, and H3 hexagonal grid operations.</div>
+        <div class="links"><a href="https://github.com/GeoLang/fenestra">GitHub</a> <a href="https://geolang.github.io/fenestra">Docs</a></div>
+      </div>
+      <div class="card">
+        <h3>Terravista</h3>
+        <div class="desc">3D terrain visualization with mesh generation and texture mapping.</div>
+        <div class="links"><a href="https://github.com/GeoLang/terravista">GitHub</a> <a href="https://geolang.github.io/terravista">Docs</a></div>
+      </div>
+      <div class="card">
+        <h3>GeoGit</h3>
+        <div class="desc">Git-like version control for geospatial datasets with diff and merge support.</div>
+        <div class="links"><a href="https://github.com/GeoLang/geogit">GitHub</a> <a href="https://geolang.github.io/geogit">Docs</a></div>
+      </div>
+      <div class="card">
+        <h3>Jung</h3>
+        <div class="desc">Spatial graph analytics — centrality, community detection, and network analysis.</div>
+        <div class="links"><a href="https://github.com/GeoLang/jung">GitHub</a> <a href="https://geolang.github.io/jung">Docs</a></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <p>GeoLang — All components licensed under AGPL-3.0-or-later</p>
+  <p style="margin-top:.5rem"><a href="https://github.com/GeoLang">GitHub Organization</a></p>
+</footer>
+
+</body>
+</html>
