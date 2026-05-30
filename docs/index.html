@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GeoLang — Developer Documentation</title>
+<meta name="description" content="Architecture, infrastructure, and developer guide for the GeoLang geospatial platform.">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#0a0e14;--card:#131820;--border:#1e2a3a;--text:#b8c4d0;--heading:#eaf0f6;--accent:#7c5cf5;--accent2:#00c896;--muted:#6b7a8d;--white:#fff;--code-bg:#0d1117}
+body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;line-height:1.7}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline}
+.container{max-width:1140px;margin:0 auto;padding:0 24px}
+nav{padding:20px 0;border-bottom:1px solid var(--border);position:sticky;top:0;background:var(--bg);z-index:100}
+nav .container{display:flex;align-items:center;justify-content:space-between}
+nav .logo{font-size:1.3rem;font-weight:700;color:var(--heading)}
+nav .links a{margin-left:24px;color:var(--muted);font-size:.95rem}
+nav .links a:hover{color:var(--accent)}
+h1{font-size:2.5rem;color:var(--heading);margin:60px 0 20px;font-weight:700}
+h2{font-size:1.8rem;color:var(--heading);margin:48px 0 16px;padding-top:24px;border-top:1px solid var(--border)}
+h3{font-size:1.3rem;color:var(--heading);margin:32px 0 12px}
+p,li{margin-bottom:12px}
+ul,ol{padding-left:24px}
+code{background:var(--code-bg);padding:2px 6px;border-radius:4px;font-family:'SF Mono',Monaco,Consolas,monospace;font-size:.9em}
+pre{background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:20px;overflow-x:auto;margin:16px 0}
+pre code{background:none;padding:0}
+table{width:100%;border-collapse:collapse;margin:16px 0}
+th,td{padding:10px 14px;text-align:left;border-bottom:1px solid var(--border)}
+th{color:var(--heading);font-weight:600;background:var(--card)}
+tr:hover td{background:var(--card)}
+.badge{display:inline-block;padding:2px 8px;border-radius:4px;font-size:.8rem;font-weight:600}
+.badge-green{background:#00c89622;color:var(--accent2)}
+.badge-purple{background:#7c5cf522;color:var(--accent)}
+.badge-yellow{background:#f5a62322;color:#f5a623}
+.toc{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:24px 32px;margin:32px 0}
+.toc h3{margin-top:0}
+.toc ul{list-style:none;padding:0}
+.toc li{margin-bottom:8px}
+.toc a{color:var(--text)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:16px;margin:16px 0}
+.card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px}
+.card h4{color:var(--heading);margin-bottom:8px}
+.card p{color:var(--muted);font-size:.9rem;margin-bottom:0}
+.mermaid-wrapper{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:24px;margin:16px 0;overflow-x:auto}
+footer{padding:40px 0;border-top:1px solid var(--border);margin-top:80px;text-align:center;color:var(--muted);font-size:.9rem}
+</style>
+</head>
+<body>
+<nav>
+<div class="container">
+<a href="/" class="logo">GeoLang</a>
+<div class="links">
+<a href="/">Home</a>
+<a href="/docs/">Docs</a>
+<a href="https://github.com/GeoLang">GitHub</a>
+</div>
+</div>
+</nav>
+
+<div class="container">
+<h1>Developer Documentation</h1>
+<p>Architecture, infrastructure, and developer guide for the GeoLang geospatial platform.</p>
+
+<div class="toc">
+<h3>Table of Contents</h3>
+<ul>
+<li><a href="#architecture">Architecture Overview</a></li>
+<li><a href="#repositories">Repository Map</a></li>
+<li><a href="#infrastructure">Infrastructure &amp; CI/CD</a></li>
+<li><a href="#development">Development Guide</a></li>
+<li><a href="#testing">Testing Strategy</a></li>
+<li><a href="#security">Security &amp; Supply Chain</a></li>
+<li><a href="#deployment">Deployment</a></li>
+<li><a href="#api">API Reference</a></li>
+</ul>
+</div>
+
+<h2 id="architecture">Architecture Overview</h2>
+<p>GeoLang is a modular geospatial platform composed of 18 independent Rust microservices and libraries, orchestrated via Docker Compose. Each component has a focused responsibility and communicates via well-defined interfaces.</p>
+
+<div class="mermaid-wrapper">
+<pre><code>┌─────────────────────────────────────────────────────────────────────┐
+│                         User Interface                                │
+│                                                                       │
+│  ViewTopia (Svelte)  ─────────────────────────  GeoLang (Agent)      │
+│  :5174                                          :8080                 │
+└────────┬─────────────────────────────────────────┬───────────────────┘
+         │                                         │
+         ▼                                         ▼
+┌─────────────────────────────────────────────────────────────────────┐
+│                         Service Layer                                 │
+│                                                                       │
+│  TileTopia    Ptolemy     Geokode     Itinera     Fenestra           │
+│  :3100        :3000       :3001       :3002       :3003              │
+│  (tiles)      (features)  (geocode)   (routing)   (OGC APIs)        │
+└────────┬─────────┬──────────┬──────────┬──────────┬─────────────────┘
+         │         │          │          │          │
+         ▼         ▼          ▼          ▼          ▼
+┌─────────────────────────────────────────────────────────────────────┐
+│                         Core Libraries                                │
+│                                                                       │
+│  Topoi        Projicio    Terrano     Nubis       Jung               │
+│  (geometry)   (proj)      (raster)    (weather)   (analysis)         │
+│                                                                       │
+│  GeoGit       Fluvius     Panoptes    GeoDukt     Collecta           │
+│  (versioning) (hydrology) (monitoring)(pipelines) (forms)            │
+│                                                                       │
+│  TerraVista   Interiora   Projicio                                   │
+│  (navigation) (indoor)    (projection)                               │
+└─────────────────────────────────────────────────────────────────────┘
+         │
+         ▼
+┌─────────────────────────────────────────────────────────────────────┐
+│                         Data Layer                                    │
+│                                                                       │
+│  PostGIS :5432          Object Storage          File System          │
+└─────────────────────────────────────────────────────────────────────┘</code></pre>
+</div>
+
+<h3>Design Principles</h3>
+<ul>
+<li><strong>Workspace crates</strong>: Each repo uses a Cargo workspace with <code>crates/{name}-core</code>, <code>crates/{name}-cli</code>, and optionally <code>crates/{name}-server</code></li>
+<li><strong>Edition 2024</strong>: All crates use Rust edition 2024</li>
+<li><strong>AGPL-3.0-or-later</strong>: Consistent licensing across all repositories</li>
+<li><strong>Zero unsafe</strong>: No unsafe code in application crates</li>
+<li><strong>Error propagation</strong>: <code>thiserror</code> for library errors, <code>anyhow</code> for CLI</li>
+</ul>
+
+<h2 id="repositories">Repository Map</h2>
+
+<table>
+<thead>
+<tr><th>Repository</th><th>Purpose</th><th>Type</th><th>Tests</th><th>Docs</th></tr>
+</thead>
+<tbody>
+<tr><td><a href="https://github.com/GeoLang/tiletopia">tiletopia</a></td><td>Vector/raster tile server with MVT, terrain, and point cloud support</td><td><span class="badge badge-purple">Server</span></td><td>523</td><td><a href="https://geolang.github.io/tiletopia/">API</a></td></tr>
+<tr><td><a href="https://github.com/GeoLang/viewtopia">viewtopia</a></td><td>Svelte web map frontend with Maplibre GL</td><td><span class="badge badge-green">UI</span></td><td>—</td><td><a href="https://geolang.github.io/viewtopia/">App</a></td></tr>
+<tr><td><a href="https://github.com/GeoLang/itinera">itinera</a></td><td>Turn-by-turn routing engine with contraction hierarchies</td><td><span class="badge badge-purple">Server</span></td><td>55</td><td><a href="https://geolang.github.io/itinera/">API</a></td></tr>
+<tr><td><a href="https://github.com/GeoLang/geokode">geokode</a></td><td>Geocoding with FST text index and R-tree spatial search</td><td><span class="badge badge-purple">Server</span></td><td>47</td><td><a href="https://geolang.github.io/geokode/">API</a></td></tr>
+<tr><td><a href="https://github.com/GeoLang/nubis">nubis</a></td><td>Weather data processing and forecast aggregation</td><td><span class="badge badge-yellow">Library</span></td><td>52</td><td><a href="https://geolang.github.io/nubis/">API</a></td></tr>
+<tr><td><a href="https://github.com/GeoLang/terrano">terrano</a></td><td>Raster algebra, terrain analysis, and contour generation</td><td><span class="badge badge-yellow">Library</span></td><td>51</td><td><a href="https://geolang.github.io/terrano/">API</a></td></tr>
+<tr><td><a href="https://github.com/GeoLang/ptolemy">ptolemy</a></td><td>PostGIS feature server with spatial queries</td><td><span class="badge badge-purple">Server</span></td><td>39</td><td><a href="https://geolang.github.io/ptolemy/">API</a></td></tr>
+<tr><td><a href="https://github.com/GeoLang/geodukt">geodukt</a></td><td>ETL pipelines for geospatial data transformation</td><td><span class="badge badge-yellow">Library</span></td><td>62</td><td><a href="https://geolang.github.io/geodukt/">API</a></td></tr>
+<tr><td><a href="https://github.com/GeoLang/geogit">geogit</a></td><td>Geospatial data versioning and diff</td><td><span class="badge badge-yellow">Library</span></td><td>70</td><td><a href="https://geolang.github.io/geogit/">API</a></td></tr>
+<tr><td><a href="https://github.com/GeoLang/jung">jung</a></td><td>Spatial statistics and geostatistical analysis</td><td><span class="badge badge-yellow">Library</span></td><td>221</td><td><a href="https://geolang.github.io/jung/">API</a></td></tr>
+<tr><td><a href="https://github.com/GeoLang/fluvius">fluvius</a></td><td>Hydrology modeling and watershed analysis</td><td><span class="badge badge-yellow">Library</span></td><td>72</td><td><a href="https://geolang.github.io/fluvius/">API</a></td></tr>
+<tr><td><a href="https://github.com/GeoLang/panoptes">panoptes</a></td><td>Geospatial monitoring and alerting</td><td><span class="badge badge-yellow">Library</span></td><td>43</td><td><a href="https://geolang.github.io/panoptes/">API</a></td></tr>
+<tr><td><a href="https://github.com/GeoLang/projicio">projicio</a></td><td>Coordinate projection and datum transformation</td><td><span class="badge badge-yellow">Library</span></td><td>48</td><td><a href="https://geolang.github.io/projicio/">API</a></td></tr>
+<tr><td><a href="https://github.com/GeoLang/topoi">topoi</a></td><td>Computational geometry: hull, Delaunay, predicates, simplification</td><td><span class="badge badge-yellow">Library</span></td><td>62</td><td><a href="https://geolang.github.io/topoi/">API</a></td></tr>
+<tr><td><a href="https://github.com/GeoLang/fenestra">fenestra</a></td><td>OGC API Features/Tiles/Processes server</td><td><span class="badge badge-purple">Server</span></td><td>48</td><td><a href="https://geolang.github.io/fenestra/">API</a></td></tr>
+<tr><td><a href="https://github.com/GeoLang/terravista">terravista</a></td><td>Mobile navigation SDK with camera, tiles, and routing</td><td><span class="badge badge-yellow">Library</span></td><td>48</td><td><a href="https://geolang.github.io/terravista/">API</a></td></tr>
+<tr><td><a href="https://github.com/GeoLang/collecta">collecta</a></td><td>Geospatial form builder and field data collection</td><td><span class="badge badge-yellow">Library</span></td><td>45</td><td><a href="https://geolang.github.io/collecta/">API</a></td></tr>
+<tr><td><a href="https://github.com/GeoLang/interiora">interiora</a></td><td>Indoor mapping, routing, and positioning</td><td><span class="badge badge-yellow">Library</span></td><td>49</td><td><a href="https://geolang.github.io/interiora/">API</a></td></tr>
+</tbody>
+</table>
+
+<h2 id="infrastructure">Infrastructure &amp; CI/CD</h2>
+
+<h3>GitHub Actions Workflows</h3>
+<p>Every repository ships with three standardized workflows:</p>
+
+<div class="grid">
+<div class="card">
+<h4>ci.yml</h4>
+<p>Cross-platform (Linux, macOS, Windows) checks: formatting, clippy, tests. Plus cargo-deny for license/ban/source compliance, and llvm-cov coverage uploaded to Codecov.</p>
+</div>
+<div class="card">
+<h4>release.yml</h4>
+<p>Triggered on <code>v*</code> tags. Builds release binaries for x86_64/aarch64 Linux, x86_64/aarch64 macOS using cross-compilation. Publishes GitHub Releases with tarballs.</p>
+</div>
+<div class="card">
+<h4>docs.yml</h4>
+<p>Builds <code>cargo doc</code> on every push to master and deploys to GitHub Pages. Each repo's API docs are available at <code>https://geolang.github.io/{repo}/</code>.</p>
+</div>
+</div>
+
+<h3>Dependency Management</h3>
+<ul>
+<li><strong>Dependabot</strong>: Weekly updates for Cargo dependencies and GitHub Actions</li>
+<li><strong>cargo-deny</strong>: License allowlist, ban duplicate detection, source verification</li>
+<li><strong>Allowed licenses</strong>: MIT, Apache-2.0, BSD-2/3-Clause, ISC, Unicode-3.0, Zlib, MPL-2.0, AGPL-3.0-or-later, CC0-1.0, WTFPL, NCSA, BSL-1.0, CDLA-Permissive-2.0</li>
+</ul>
+
+<h3>Templates &amp; Governance</h3>
+<ul>
+<li><strong>CONTRIBUTING.md</strong>: Standard contribution workflow</li>
+<li><strong>CODE_OF_CONDUCT.md</strong>: Contributor Covenant v2.1</li>
+<li><strong>Issue templates</strong>: Bug reports and feature requests</li>
+<li><strong>PR template</strong>: Description, changes, testing checklist</li>
+<li><strong>CHANGELOG.md</strong>: Keep a Changelog format with semantic versioning</li>
+</ul>
+
+<h2 id="development">Development Guide</h2>
+
+<h3>Prerequisites</h3>
+<pre><code># Rust toolchain (stable)
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+rustup component add clippy rustfmt llvm-tools-preview
+
+# Tools
+cargo install cargo-deny cargo-llvm-cov
+
+# For server development
+docker compose up -d  # PostGIS, etc.
+</code></pre>
+
+<h3>Clone All Repos</h3>
+<pre><code>#!/bin/bash
+REPOS=(tiletopia viewtopia itinera geokode nubis terrano ptolemy geodukt \
+       geogit jung fluvius panoptes projicio topoi fenestra terravista \
+       collecta interiora)
+
+for repo in "${REPOS[@]}"; do
+  git clone git@github.com:GeoLang/${repo}.git ~/src/${repo}
+done
+</code></pre>
+
+<h3>Standard Workflow</h3>
+<pre><code># Before every commit (non-negotiable):
+cargo fmt --all
+cargo clippy --all-targets --all-features -- -D warnings
+cargo test --all
+cargo deny check licenses sources bans
+</code></pre>
+
+<h3>Docker Compose (Development)</h3>
+<pre><code># Service ports:
+# PostGIS        → :5432
+# Ptolemy        → :3000
+# TileTopia      → :3100
+# Geokode        → :3001
+# Itinera        → :3002
+# Fenestra       → :3003
+# ViewTopia      → :5174
+# GeoLang Agent  → :8080
+# Letta          → :8283
+</code></pre>
+
+<h2 id="testing">Testing Strategy</h2>
+
+<h3>Test Pyramid</h3>
+<ul>
+<li><strong>Unit tests</strong>: In-module <code>#[cfg(test)]</code> blocks for internal logic</li>
+<li><strong>Integration tests</strong>: <code>crates/{name}-core/tests/</code> for public API exercising</li>
+<li><strong>Benchmarks</strong>: <code>crates/{name}-core/benches/</code> using Criterion (topoi, projicio, geokode)</li>
+<li><strong>Coverage</strong>: <code>cargo llvm-cov</code> with reports uploaded to Codecov in CI</li>
+</ul>
+
+<h3>Running Benchmarks</h3>
+<pre><code># Run all benchmarks for a crate
+cargo bench -p topoi-core
+
+# Run a specific benchmark
+cargo bench -p projicio-core --bench projections
+
+# Compare against baseline
+cargo bench -p geokode-core -- --save-baseline main
+# ... make changes ...
+cargo bench -p geokode-core -- --baseline main
+</code></pre>
+
+<h3>Coverage Report</h3>
+<pre><code># Generate HTML coverage report
+cargo llvm-cov --all-features --workspace --html --open
+
+# Generate LCOV for CI
+cargo llvm-cov --all-features --workspace --lcov --output-path lcov.info
+</code></pre>
+
+<h2 id="security">Security &amp; Supply Chain</h2>
+
+<h3>cargo-deny Configuration</h3>
+<p>Every repository includes a <code>deny.toml</code> that enforces:</p>
+<ul>
+<li><strong>License compliance</strong>: Only pre-approved FOSS licenses</li>
+<li><strong>Advisory database</strong>: RUSTSEC vulnerability checks (informational in CI)</li>
+<li><strong>Source verification</strong>: Only crates.io registry, no unknown git sources</li>
+<li><strong>Ban detection</strong>: Warns on duplicate crate versions in dependency tree</li>
+</ul>
+
+<h3>Security Practices</h3>
+<ul>
+<li>No <code>unsafe</code> in application code</li>
+<li>Input validation at all API boundaries</li>
+<li>Parameterized queries for PostGIS (no SQL injection)</li>
+<li>TLS required for all external connections</li>
+<li>Secrets via environment variables, never hardcoded</li>
+</ul>
+
+<h2 id="deployment">Deployment</h2>
+
+<h3>Release Process</h3>
+<ol>
+<li>Update <code>CHANGELOG.md</code> under <code>[Unreleased]</code> → <code>[x.y.z] - YYYY-MM-DD</code></li>
+<li>Bump version in workspace <code>Cargo.toml</code></li>
+<li>Create and push a git tag: <code>git tag -a v0.2.0 -m "Release v0.2.0" && git push --tags</code></li>
+<li>GitHub Actions builds binaries and creates a GitHub Release</li>
+</ol>
+
+<h3>Docker</h3>
+<pre><code># Build any server component
+docker build -t geolang/ptolemy:latest -f Dockerfile .
+
+# Multi-service deployment
+docker compose -f docker-compose.prod.yml up -d
+</code></pre>
+
+<h2 id="api">API Reference</h2>
+<p>Each repository publishes rustdoc API documentation to GitHub Pages on every push to master:</p>
+<div class="grid">
+<div class="card"><h4><a href="https://geolang.github.io/tiletopia/">TileTopia</a></h4><p>Tile serving, MVT generation, terrain mesh</p></div>
+<div class="card"><h4><a href="https://geolang.github.io/ptolemy/">Ptolemy</a></h4><p>Feature CRUD, spatial queries, PostGIS</p></div>
+<div class="card"><h4><a href="https://geolang.github.io/geokode/">Geokode</a></h4><p>Forward/reverse geocoding, address parsing</p></div>
+<div class="card"><h4><a href="https://geolang.github.io/itinera/">Itinera</a></h4><p>Shortest path, contraction hierarchies</p></div>
+<div class="card"><h4><a href="https://geolang.github.io/fenestra/">Fenestra</a></h4><p>OGC API Features, Tiles, Processes</p></div>
+<div class="card"><h4><a href="https://geolang.github.io/topoi/">Topoi</a></h4><p>Geometry, predicates, algorithms, Delaunay</p></div>
+<div class="card"><h4><a href="https://geolang.github.io/projicio/">Projicio</a></h4><p>Projections, datum transforms, EPSG</p></div>
+<div class="card"><h4><a href="https://geolang.github.io/terrano/">Terrano</a></h4><p>Raster algebra, terrain, contours, hydrology</p></div>
+<div class="card"><h4><a href="https://geolang.github.io/jung/">Jung</a></h4><p>Spatial statistics, geostatistics</p></div>
+<div class="card"><h4><a href="https://geolang.github.io/fluvius/">Fluvius</a></h4><p>Hydrology, watershed, flow analysis</p></div>
+<div class="card"><h4><a href="https://geolang.github.io/nubis/">Nubis</a></h4><p>Weather data, forecasts, aggregation</p></div>
+<div class="card"><h4><a href="https://geolang.github.io/geodukt/">GeoDukt</a></h4><p>ETL pipelines, data transformation</p></div>
+<div class="card"><h4><a href="https://geolang.github.io/geogit/">GeoGit</a></h4><p>Versioning, diff, spatial history</p></div>
+<div class="card"><h4><a href="https://geolang.github.io/panoptes/">Panoptes</a></h4><p>Monitoring, alerting, observability</p></div>
+<div class="card"><h4><a href="https://geolang.github.io/terravista/">TerraVista</a></h4><p>Navigation, camera, tile cache</p></div>
+<div class="card"><h4><a href="https://geolang.github.io/collecta/">Collecta</a></h4><p>Forms, field collection, validation</p></div>
+<div class="card"><h4><a href="https://geolang.github.io/interiora/">Interiora</a></h4><p>Indoor mapping, routing, positioning</p></div>
+</div>
+
+</div>
+
+<footer>
+<div class="container">
+<p>&copy; 2025 GeoLang. Licensed under AGPL-3.0-or-later. <a href="https://github.com/GeoLang">GitHub</a></p>
+</div>
+</footer>
+</body>
+</html>
