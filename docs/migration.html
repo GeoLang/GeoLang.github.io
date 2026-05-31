@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Migration Guide — GeoLang</title>
+<meta name="description" content="Migrate from GeoServer, ArcGIS, Mapbox, or other GIS platforms to GeoLang.">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#0a0e14;--card:#131820;--border:#1e2a3a;--text:#b8c4d0;--heading:#eaf0f6;--accent:#7c5cf5;--accent2:#00c896;--muted:#6b7a8d;--white:#fff;--code-bg:#0d1117}
+body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;line-height:1.7}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline}
+.container{max-width:900px;margin:0 auto;padding:0 24px}
+nav{padding:20px 0;border-bottom:1px solid var(--border);position:sticky;top:0;background:var(--bg);z-index:100}
+nav .container{display:flex;align-items:center;justify-content:space-between}
+nav .logo{font-size:1.3rem;font-weight:700;color:var(--heading)}
+nav .links a{margin-left:24px;color:var(--muted);font-size:.95rem}
+h1{font-size:2.5rem;color:var(--heading);margin:60px 0 20px;font-weight:700}
+h2{font-size:1.8rem;color:var(--heading);margin:48px 0 16px;padding-top:24px;border-top:1px solid var(--border)}
+h3{font-size:1.3rem;color:var(--heading);margin:32px 0 12px}
+p,li{margin-bottom:12px}
+ul,ol{padding-left:24px}
+code{background:var(--code-bg);padding:2px 6px;border-radius:4px;font-family:'SF Mono',Monaco,Consolas,monospace;font-size:.9em}
+pre{background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:20px;overflow-x:auto;margin:16px 0}
+pre code{background:none;padding:0}
+table{width:100%;border-collapse:collapse;margin:16px 0}
+th,td{padding:10px 14px;text-align:left;border-bottom:1px solid var(--border)}
+th{color:var(--heading);font-weight:600;background:var(--card)}
+.card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:24px;margin:16px 0}
+.step{counter-increment:step;position:relative;padding-left:48px;margin:24px 0}
+.step::before{content:counter(step);position:absolute;left:0;top:0;width:32px;height:32px;background:var(--accent);color:var(--white);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.9rem}
+.steps{counter-reset:step}
+footer{padding:40px 0;border-top:1px solid var(--border);margin-top:80px;text-align:center;color:var(--muted);font-size:.9rem}
+</style>
+</head>
+<body>
+<nav>
+<div class="container">
+<a href="/" class="logo">GeoLang</a>
+<div class="links">
+<a href="/">Home</a>
+<a href="/docs/">Docs</a>
+<a href="/docs/migration.html">Migration</a>
+</div>
+</div>
+</nav>
+
+<div class="container">
+<h1>Migration Guide</h1>
+<p>Step-by-step instructions for migrating from existing GIS platforms to GeoLang.</p>
+
+<h2 id="from-geoserver">Migrating from GeoServer</h2>
+
+<p>GeoServer is a Java-based OGC server. GeoLang replaces it with <strong>Fenestra</strong> (OGC gateway) + <strong>Ptolemy</strong> (feature store).</p>
+
+<div class="card">
+<h3>What maps to what</h3>
+<table>
+<tr><th>GeoServer Concept</th><th>GeoLang Equivalent</th></tr>
+<tr><td>Workspace</td><td>Ptolemy Dataset</td></tr>
+<tr><td>Layer / FeatureType</td><td>Ptolemy Branch (versioned layer)</td></tr>
+<tr><td>DataStore (PostGIS)</td><td>Ptolemy Storage (PostGIS-backed)</td></tr>
+<tr><td>SLD Styles</td><td>Ptolemy Cartography / Fenestra Styles</td></tr>
+<tr><td>WMS/WFS endpoints</td><td>Fenestra OGC API</td></tr>
+<tr><td>GeoWebCache tiles</td><td>TileTopia (3D Tiles + MVT)</td></tr>
+</table>
+</div>
+
+<h3>Step-by-step migration</h3>
+<div class="steps">
+<div class="step">
+<h4>Export your data from GeoServer</h4>
+<pre><code># Option A: Export as GeoJSON via WFS
+curl "http://geoserver:8080/wfs?service=WFS&version=2.0.0&request=GetFeature&typeNames=workspace:layer&outputFormat=application/json" > layer.geojson
+
+# Option B: Export directly from PostGIS
+ogr2ogr -f GeoJSON layer.geojson PG:"host=localhost dbname=geo" "schema.table"
+
+# Option C: Export as GeoPackage (preserves schema better)
+ogr2ogr -f GPKG export.gpkg PG:"host=localhost dbname=geo" "schema.table"</code></pre>
+</div>
+
+<div class="step">
+<h4>Start the GeoLang platform</h4>
+<pre><code># Clone repos and start Docker Compose
+cd viewtopia
+docker compose -f docker-compose.platform.yml up --build -d</code></pre>
+</div>
+
+<div class="step">
+<h4>Create a dataset and branch in Ptolemy</h4>
+<pre><code># Create dataset
+ptolemy dataset create "buildings" --srid 4326 --geometry-type polygon --created-by admin
+
+# Note the dataset ID from output, e.g. 019...
+# Create a branch
+ptolemy branch create --dataset &lt;dataset-id&gt; "main" --created-by admin</code></pre>
+</div>
+
+<div class="step">
+<h4>Import your data</h4>
+<pre><code># Import GeoJSON
+ptolemy import --branch &lt;branch-id&gt; layer.geojson --author admin -m "Initial import from GeoServer"
+
+# Import Shapefile
+ptolemy import --branch &lt;branch-id&gt; layer.shp --author admin -m "Import shapefile"
+
+# Import GeoPackage
+ptolemy import --branch &lt;branch-id&gt; export.gpkg --author admin -m "Import from GeoPackage"</code></pre>
+</div>
+
+<div class="step">
+<h4>Configure Fenestra for OGC access</h4>
+<p>Use the dashboard at <code>http://localhost:4000/dashboard/layers</code> to add layers pointing to Ptolemy branches. Fenestra provides WMS, WFS, and WMTS endpoints compatible with QGIS, ArcGIS Pro, and other clients.</p>
+</div>
+</div>
+
+<h2 id="from-arcgis">Migrating from ArcGIS Enterprise / Online</h2>
+
+<p>ArcGIS is a proprietary platform. GeoLang replaces it with an open-source stack:</p>
+
+<div class="card">
+<table>
+<tr><th>ArcGIS Concept</th><th>GeoLang Equivalent</th></tr>
+<tr><td>Feature Service</td><td>Ptolemy (versioned features + REST API)</td></tr>
+<tr><td>Map Service / Tiles</td><td>TileTopia (3D Tiles + MVT)</td></tr>
+<tr><td>Geocoder</td><td>Geokode</td></tr>
+<tr><td>Network Analysis</td><td>Itinera (routing + isochrones)</td></tr>
+<tr><td>ArcGIS Online Portal</td><td>ViewTopia (web viewer + AI agent)</td></tr>
+<tr><td>Geoprocessing</td><td>Geodukt (ETL pipelines)</td></tr>
+<tr><td>Scene Viewer (3D)</td><td>ViewTopia CesiumJS globe</td></tr>
+<tr><td>Field Maps</td><td>Collecta (field data collection)</td></tr>
+<tr><td>Navigator</td><td>TerraVista (mobile SDK)</td></tr>
+</table>
+</div>
+
+<h3>Export from ArcGIS</h3>
+<pre><code># Using GDAL/OGR to export from ArcGIS Feature Service:
+ogr2ogr -f GeoJSON buildings.geojson \
+  "https://services.arcgis.com/ORG_ID/arcgis/rest/services/Buildings/FeatureServer/0/query?where=1%3D1&outFields=*&f=geojson"
+
+# Or export from File Geodatabase:
+ogr2ogr -f GeoJSON parcels.geojson input.gdb parcels
+
+# Or as GeoPackage:
+ogr2ogr -f GPKG export.gpkg input.gdb</code></pre>
+
+<h3>Import into GeoLang</h3>
+<pre><code># Same as above — create dataset, branch, then import
+ptolemy dataset create "parcels" --srid 4326 --geometry-type polygon --created-by admin
+ptolemy branch create --dataset &lt;id&gt; "main" --created-by admin
+ptolemy import --branch &lt;id&gt; parcels.geojson --author admin</code></pre>
+
+<h2 id="from-mapbox">Migrating from Mapbox</h2>
+
+<p>Mapbox is a SaaS mapping platform with per-request pricing. GeoLang gives you the same capabilities self-hosted:</p>
+
+<div class="card">
+<table>
+<tr><th>Mapbox Concept</th><th>GeoLang Equivalent</th></tr>
+<tr><td>Mapbox GL JS</td><td>ViewTopia (MapLibre GL + CesiumJS)</td></tr>
+<tr><td>Mapbox Tiling Service</td><td>TileTopia</td></tr>
+<tr><td>Mapbox Geocoding</td><td>Geokode</td></tr>
+<tr><td>Mapbox Directions</td><td>Itinera</td></tr>
+<tr><td>Mapbox Studio Styles</td><td>Ptolemy Cartography API</td></tr>
+<tr><td>Mapbox Datasets</td><td>Ptolemy Datasets + Branches</td></tr>
+</table>
+</div>
+
+<h3>Style migration</h3>
+<p>Mapbox GL styles are JSON objects. GeoLang's ViewTopia uses MapLibre GL which is 100% compatible with Mapbox GL styles. Simply:</p>
+<ol>
+<li>Export your style JSON from Mapbox Studio</li>
+<li>Replace <code>mapbox://</code> tile URLs with your TileTopia URLs</li>
+<li>Remove the Mapbox access token requirement</li>
+</ol>
+
+<h2 id="from-qgis">Using QGIS with GeoLang</h2>
+
+<p>QGIS connects directly to GeoLang services:</p>
+
+<ul>
+<li><strong>WMS/WFS</strong>: Add Fenestra as an OGC connection → <code>http://localhost:3003/wms</code></li>
+<li><strong>PostGIS</strong>: Connect directly to the Ptolemy database → <code>localhost:5432</code></li>
+<li><strong>Vector Tiles</strong>: Add TileTopia as a Vector Tile source → <code>http://localhost:3100/tiles/{z}/{x}/{y}.pbf</code></li>
+<li><strong>Geocoding</strong>: Use the QGIS geocoding plugin with Geokode → <code>http://localhost:3001/search?q=...</code></li>
+</ul>
+
+<h2 id="api-access">API Access & Authentication</h2>
+
+<h3>Generate an API key</h3>
+<pre><code># Create a key for programmatic access
+ptolemy apikey create "ci-pipeline" --role editor --expires-days 90
+# → ptk_019...  (save this!)
+
+# Use it in API requests:
+curl -H "X-API-Key: ptk_019..." http://localhost:3000/datasets</code></pre>
+
+<h3>JWT Authentication</h3>
+<pre><code># Set the JWT secret:
+export PTOLEMY_JWT_SECRET="your-secret-here"
+
+# Tokens are generated via OIDC callback or manually:
+# See ptolemy-api docs for OIDC configuration</code></pre>
+
+<h2 id="webhooks">Webhooks & Event Streaming</h2>
+
+<pre><code># Register a webhook for commit notifications:
+curl -X POST http://localhost:3000/datasets/&lt;id&gt;/webhooks \
+  -H "Content-Type: application/json" \
+  -d '{"url": "https://your-app.com/hook", "events": ["commit"], "secret": "hmac-secret"}'
+
+# Webhook payloads include HMAC signature in X-Ptolemy-Signature header
+# Delivery has automatic retries with exponential backoff (1s, 2s, 4s)</code></pre>
+
+<h2 id="backup">Backup & Restore</h2>
+
+<pre><code># Backup (custom format — recommended for pg_restore)
+ptolemy backup dump.backup --custom
+
+# Backup (plain SQL)
+ptolemy backup dump.sql
+
+# Restore
+ptolemy restore dump.backup --clean</code></pre>
+
+</div>
+
+<footer>
+<div class="container">
+<p>© 2024-2026 GeoLang Contributors · <a href="https://github.com/GeoLang">GitHub</a> · AGPL-3.0</p>
+</div>
+</footer>
+</body>
+</html>
