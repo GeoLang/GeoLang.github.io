@@ -213,7 +213,7 @@ footer{padding:40px 0;border-top:1px solid var(--border);text-align:center;color
 <a class="stack-item" href="https://geolang.github.io/interiora"><span class="emoji">🏢</span><div><div class="name">Interiora</div><div class="desc">Indoor mapping</div></div></a>
 <a class="stack-item" href="https://geolang.github.io/collecta"><span class="emoji">📋</span><div><div class="name">Collecta</div><div class="desc">Field data collection</div></div></a>
 <a class="stack-item" href="https://geolang.github.io/terravista"><span class="emoji">📱</span><div><div class="name">TerraVista</div><div class="desc">Mobile SDK + offline tiles</div></div></a>
-<a class="stack-item" href="https://geolang.github.io/fenestra"><span class="emoji">🌐</span><div><div class="name">Fenestra</div><div class="desc">OGC services + MVT</div></div></a>
+<a class="stack-item" href="https://geolang.github.io/fenestra"><span class="emoji">🌐</span><div><div class="name">Fenestra</div><div class="desc">OGC WMS/WFS/WMTS + server-side rendering</div></div></a>
 <a class="stack-item" href="https://github.com/GeoLang/geolang"><span class="emoji">🤖</span><div><div class="name">GeoLang</div><div class="desc">AI agent</div></div></a>
 </div>
 </div>
@@ -227,7 +227,9 @@ footer{padding:40px 0;border-top:1px solid var(--border);text-align:center;color
 <a href="https://github.com/GeoLang" class="btn-primary">Get Started Free</a>
 </div>
 <p style="margin-top:20px;font-family:monospace;color:var(--muted);font-size:.9rem">
-docker compose -f docker-compose.platform.yml up --build
+docker compose -f docker-compose.platform.yml up --build<br>
+<span style="color:var(--accent);"># or all-in-one single container:</span><br>
+docker run -p 3000:3000 -p 3003:3003 -p 3100:3100 geolang/allinone
 </p>
 </div>
 </section>
