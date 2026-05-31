@@ -306,6 +306,14 @@ docker build -t geolang/ptolemy:latest -f Dockerfile .
 docker compose -f docker-compose.prod.yml up -d
 </code></pre>
 
+<h3>Production Notes</h3>
+<ul>
+<li><strong>Observability</strong>: All servers include <code>tower-http TraceLayer</code>. Set <code>RUST_LOG=info</code> (or <code>geokode=debug</code> etc.) to control verbosity.</li>
+<li><strong>Rate Limiting</strong>: Handle at the reverse proxy level (nginx <code>limit_req_zone</code>, HAProxy, or cloud LB). Application-level rate limiting is not included because infrastructure-level rate limiting is more reliable, configurable, and avoids type-system complexity with axum's service traits.</li>
+<li><strong>Load Testing</strong>: Each server repo includes a <code>scripts/load_test.js</code> k6 script. Run with: <code>k6 run scripts/load_test.js</code></li>
+<li><strong>Health Checks</strong>: All servers expose <code>GET /health</code> returning <code>200 OK</code>.</li>
+</ul>
+
 <h2 id="api">API Reference</h2>
 <p>Each repository publishes rustdoc API documentation to GitHub Pages on every push to master:</p>
 <div class="grid">
