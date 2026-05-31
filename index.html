@@ -166,12 +166,15 @@ footer{padding:40px 0;border-top:1px solid var(--border);text-align:center;color
 <div class="feature-card"><div class="icon">🤖</div><h3>Natural Language Analysis</h3><p>GeoLang AI agent translates your questions into spatial operations. Powered by Letta for persistent memory across sessions.</p></div>
 <div class="feature-card"><div class="icon">🎨</div><h3>Adaptive UI (A2UI)</h3><p>Every response generates a custom interface — maps, charts, tables, forms — tailored to your specific question. No static dashboards.</p></div>
 <div class="feature-card"><div class="icon">🗄️</div><h3>Enterprise Geodatabase</h3><p>Git-like versioning for spatial data. Branch, commit, merge, diff. Role-based access, OIDC SSO, audit trails. PostGIS-powered.</p></div>
-<div class="feature-card"><div class="icon">🔬</div><h3>Geoprocessing</h3><p>19+ spatial analysis tools: buffer, clip, intersect, dissolve, voronoi, spatial join, nearest neighbor, distance matrix, and more.</p></div>
-<div class="feature-card"><div class="icon">🌐</div><h3>3D / Digital Twin</h3><p>3D Tiles, terrain, point cloud visualization. Indoor mapping with BLE/WiFi positioning. Real-time streaming for IoT/sensor data.</p></div>
-<div class="feature-card"><div class="icon">🚗</div><h3>Routing &amp; Navigation</h3><p>Shortest path, isochrones, fleet optimization, indoor wayfinding with wheelchair-accessible routing. OpenStreetMap-powered.</p></div>
+<div class="feature-card"><div class="icon">🔬</div><h3>Geoprocessing</h3><p>19+ spatial analysis tools: buffer, clip, intersect, dissolve, voronoi, spatial join, nearest neighbor, distance matrix. REST API for GP-as-a-service.</p></div>
+<div class="feature-card"><div class="icon">🌐</div><h3>3D / Digital Twin</h3><p>3D Tiles, terrain, point cloud visualization. Indoor mapping with BLE/WiFi positioning. Martin integration for PMTiles + PostGIS vector tiles.</p></div>
+<div class="feature-card"><div class="icon">🚗</div><h3>Routing &amp; Network Analysis</h3><p>Shortest path, isochrones, network graph analytics (OD matrix, centrality, connected components). OpenStreetMap-powered.</p></div>
 <div class="feature-card"><div class="icon">📡</div><h3>Field Collection</h3><p>Custom forms, offline-first sync, photo/document attachments. Collect data in the field, sync to the geodatabase automatically.</p></div>
-<div class="feature-card"><div class="icon">📱</div><h3>Mobile SDK</h3><p>Rust-native mobile SDK for iOS and Android. Offline tile caching, gesture controls, annotation layers.</p></div>
-<div class="feature-card"><div class="icon">🛰️</div><h3>AI/ML Imagery</h3><p>Object detection, change detection, land classification on satellite and aerial imagery. Panoptes-powered computer vision.</p></div>
+<div class="feature-card"><div class="icon">📱</div><h3>Mobile SDK</h3><p>Rust-native mobile SDK for iOS and Android. Offline tile packages, gesture controls, MVT vector tiles, turn-by-turn navigation.</p></div>
+<div class="feature-card"><div class="icon">🛰️</div><h3>EO &amp; Remote Sensing</h3><p>COG streaming, EO time-series analysis (composites, trend fitting, change detection, anomaly scores, phenology), AI/ML imagery classification.</p></div>
+<div class="feature-card"><div class="icon">📊</div><h3>Portal &amp; Dashboards</h3><p>Content catalog for maps, layers, and datasets. Configurable real-time dashboards with map, chart, indicator, gauge, and list widgets.</p></div>
+<div class="feature-card"><div class="icon">📐</div><h3>WASM Computational Geometry</h3><p>Topoi WASM SDK — convex hull, Delaunay, buffer, clip, simplify, and spatial predicates running in the browser at near-native speed.</p></div>
+<div class="feature-card"><div class="icon">📈</div><h3>Geostatistics</h3><p>Variogram modeling (spherical, exponential, gaussian), Ordinary Kriging, Moran's I spatial autocorrelation, Getis-Ord Gi* hot-spot analysis.</p></div>
 </div>
 </div>
 </section>
@@ -196,21 +199,21 @@ footer{padding:40px 0;border-top:1px solid var(--border);text-align:center;color
 <a class="stack-item" href="https://geolang.github.io/tiletopia"><span class="emoji">🏗️</span><div><div class="name">TileTopia</div><div class="desc">Vector &amp; raster tile server</div></div></a>
 <a class="stack-item" href="https://geolang.github.io/viewtopia"><span class="emoji">🌍</span><div><div class="name">ViewTopia</div><div class="desc">Unified viewer + A2UI</div></div></a>
 <a class="stack-item" href="https://geolang.github.io/ptolemy"><span class="emoji">🗄️</span><div><div class="name">Ptolemy</div><div class="desc">Enterprise geodatabase</div></div></a>
-<a class="stack-item" href="https://geolang.github.io/itinera"><span class="emoji">🚗</span><div><div class="name">Itinera</div><div class="desc">Routing + isochrones</div></div></a>
-<a class="stack-item" href="https://geolang.github.io/geokode"><span class="emoji">📍</span><div><div class="name">Geokode</div><div class="desc">Geocoding</div></div></a>
-<a class="stack-item" href="https://geolang.github.io/terrano"><span class="emoji">⛰️</span><div><div class="name">Terrano</div><div class="desc">Terrain analysis</div></div></a>
-<a class="stack-item" href="https://geolang.github.io/nubis"><span class="emoji">☁️</span><div><div class="name">Nubis</div><div class="desc">Point cloud processing</div></div></a>
+<a class="stack-item" href="https://geolang.github.io/itinera"><span class="emoji">🚗</span><div><div class="name">Itinera</div><div class="desc">Routing + network analysis</div></div></a>
+<a class="stack-item" href="https://geolang.github.io/geokode"><span class="emoji">📍</span><div><div class="name">Geokode</div><div class="desc">Geocoding + OSM ingest</div></div></a>
+<a class="stack-item" href="https://geolang.github.io/terrano"><span class="emoji">⛰️</span><div><div class="name">Terrano</div><div class="desc">Terrain + EO time-series</div></div></a>
+<a class="stack-item" href="https://geolang.github.io/nubis"><span class="emoji">☁️</span><div><div class="name">Nubis</div><div class="desc">Point clouds + geostatistics</div></div></a>
 <a class="stack-item" href="https://geolang.github.io/panoptes"><span class="emoji">👁️</span><div><div class="name">Panoptes</div><div class="desc">AI/ML imagery</div></div></a>
-<a class="stack-item" href="https://geolang.github.io/geodukt"><span class="emoji">🔄</span><div><div class="name">Geodukt</div><div class="desc">ETL pipeline</div></div></a>
+<a class="stack-item" href="https://geolang.github.io/geodukt"><span class="emoji">🔄</span><div><div class="name">Geodukt</div><div class="desc">ETL + GP service</div></div></a>
 <a class="stack-item" href="https://geolang.github.io/fluvius"><span class="emoji">🌊</span><div><div class="name">Fluvius</div><div class="desc">Hydrological analysis</div></div></a>
 <a class="stack-item" href="https://geolang.github.io/projicio"><span class="emoji">📐</span><div><div class="name">Projicio</div><div class="desc">CRS transforms</div></div></a>
-<a class="stack-item" href="https://geolang.github.io/jung"><span class="emoji">🖨️</span><div><div class="name">Jung</div><div class="desc">Spatial graph analytics</div></div></a>
+<a class="stack-item" href="https://geolang.github.io/jung"><span class="emoji">🖨️</span><div><div class="name">Jung</div><div class="desc">Cartographic rendering + print</div></div></a>
 <a class="stack-item" href="https://geolang.github.io/geogit"><span class="emoji">📜</span><div><div class="name">GeoGit</div><div class="desc">Versioned geodata</div></div></a>
-<a class="stack-item" href="https://geolang.github.io/topoi"><span class="emoji">📐</span><div><div class="name">Topoi</div><div class="desc">Topology engine</div></div></a>
+<a class="stack-item" href="https://geolang.github.io/topoi"><span class="emoji">📐</span><div><div class="name">Topoi</div><div class="desc">Computational geometry + WASM</div></div></a>
 <a class="stack-item" href="https://geolang.github.io/interiora"><span class="emoji">🏢</span><div><div class="name">Interiora</div><div class="desc">Indoor mapping</div></div></a>
 <a class="stack-item" href="https://geolang.github.io/collecta"><span class="emoji">📋</span><div><div class="name">Collecta</div><div class="desc">Field data collection</div></div></a>
-<a class="stack-item" href="https://geolang.github.io/terravista"><span class="emoji">📱</span><div><div class="name">TerraVista</div><div class="desc">3D terrain visualization</div></div></a>
-<a class="stack-item" href="https://geolang.github.io/fenestra"><span class="emoji">🌐</span><div><div class="name">Fenestra</div><div class="desc">Spatial indexing</div></div></a>
+<a class="stack-item" href="https://geolang.github.io/terravista"><span class="emoji">📱</span><div><div class="name">TerraVista</div><div class="desc">Mobile SDK + offline tiles</div></div></a>
+<a class="stack-item" href="https://geolang.github.io/fenestra"><span class="emoji">🌐</span><div><div class="name">Fenestra</div><div class="desc">OGC services + MVT</div></div></a>
 <a class="stack-item" href="https://github.com/GeoLang/geolang"><span class="emoji">🤖</span><div><div class="name">GeoLang</div><div class="desc">AI agent</div></div></a>
 </div>
 </div>
