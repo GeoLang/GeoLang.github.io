@@ -245,6 +245,7 @@ cargo deny check licenses sources bans
 <li><strong>Unit tests</strong>: In-module <code>#[cfg(test)]</code> blocks for internal logic</li>
 <li><strong>Integration tests</strong>: <code>crates/{name}-core/tests/</code> for public API exercising</li>
 <li><strong>Benchmarks</strong>: <code>crates/{name}-core/benches/</code> using Criterion (topoi, projicio, geokode)</li>
+<li><strong>Load tests</strong>: <a href="https://github.com/GeoLang/viewtopia/tree/master/loadtest">viewtopia/loadtest</a>, k6 against the full stack, nightly</li>
 <li><strong>Coverage</strong>: <code>cargo llvm-cov</code> with reports uploaded to Codecov in CI</li>
 </ul>
 
