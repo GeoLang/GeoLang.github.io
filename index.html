@@ -161,17 +161,17 @@ footer{padding:40px 0;border-top:1px solid var(--border);text-align:center;color
 <section class="features">
 <div class="container">
 <h2>Platform Capabilities</h2>
-<p class="subtitle">19 Rust-native modules. One unified platform.</p>
+<p class="subtitle">20 modules, 18 of them Rust-native. One unified platform.</p>
 <div class="feature-grid">
-<div class="feature-card"><div class="icon">🤖</div><h3>Natural Language Analysis</h3><p>GeoLang AI agent translates your questions into spatial operations. Powered by Letta for persistent memory across sessions.</p></div>
+<div class="feature-card"><div class="icon">🤖</div><h3>Natural Language Analysis</h3><p>GeoLang AI agent translates your questions into spatial operations. The sibyl agent loop drives 36 geospatial tools and keeps each session's history in SQLite.</p></div>
 <div class="feature-card"><div class="icon">🎨</div><h3>Adaptive UI (A2UI)</h3><p>Every response generates a custom interface — maps, charts, tables, forms — tailored to your specific question. No static dashboards.</p></div>
 <div class="feature-card"><div class="icon">🗄️</div><h3>Enterprise Geodatabase</h3><p>Git-like versioning for spatial data. Branch, commit, merge, diff. Role-based access, OIDC SSO, audit trails. PostGIS-powered.</p></div>
-<div class="feature-card"><div class="icon">🔬</div><h3>Geoprocessing</h3><p>19+ spatial analysis tools: buffer, clip, intersect, dissolve, voronoi, spatial join, nearest neighbor, distance matrix. REST API for GP-as-a-service.</p></div>
+<div class="feature-card"><div class="icon">🔬</div><h3>Geoprocessing</h3><p>Buffer, clip, intersect, dissolve, voronoi, spatial join, nearest neighbor, and distance matrix across Topoi, Geodukt, and Itinera. Geodukt's REST service exposes buffer, centroid, clip, dissolve, and simplify as GP-as-a-service.</p></div>
 <div class="feature-card"><div class="icon">🌐</div><h3>3D / Digital Twin</h3><p>3D Tiles, terrain, point cloud visualization. Indoor mapping with BLE/WiFi positioning. Martin integration for PMTiles + PostGIS vector tiles.</p></div>
 <div class="feature-card"><div class="icon">🚗</div><h3>Routing &amp; Network Analysis</h3><p>Shortest path, isochrones, network graph analytics (OD matrix, centrality, connected components). OpenStreetMap-powered.</p></div>
-<div class="feature-card"><div class="icon">📡</div><h3>Field Collection</h3><p>XLSForm-based custom forms with local SQLite persistence. Remote sync and media attachments are on the roadmap.</p></div>
+<div class="feature-card"><div class="icon">📡</div><h3>Field Collection</h3><p>XLSForm import and 20+ field types with local SQLite persistence. Offline sync queue with exponential backoff, plus photo, audio, video, and signature attachments synced separately.</p></div>
 <div class="feature-card"><div class="icon">📱</div><h3>Mobile SDK</h3><p>Rust-native mobile SDK for iOS and Android with camera, tile cache, and routing over FFI. GPU rendering, tile fetch, and MVT decode are on the roadmap.</p></div>
-<div class="feature-card"><div class="icon">🛰️</div><h3>EO &amp; Remote Sensing</h3><p>COG streaming, EO time-series analysis (composites, trend fitting, change detection, anomaly scores, phenology), AI/ML imagery classification.</p></div>
+<div class="feature-card"><div class="icon">🛰️</div><h3>EO &amp; Remote Sensing</h3><p>COG streaming, EO time-series analysis (composites, trend fitting, change detection, anomaly scores, phenology). Panoptes segments imagery through ONNX Runtime, falling back to a threshold heuristic until model weights ship.</p></div>
 <div class="feature-card"><div class="icon">📊</div><h3>Portal &amp; Dashboards</h3><p>Content catalog for maps, layers, and datasets. Configurable real-time dashboards with map, chart, indicator, gauge, and list widgets.</p></div>
 <div class="feature-card"><div class="icon">📐</div><h3>WASM Computational Geometry</h3><p>Topoi WASM SDK — convex hull, Delaunay, buffer, clip, simplify, and spatial predicates running in the browser at near-native speed.</p></div>
 <div class="feature-card"><div class="icon">📈</div><h3>Geostatistics</h3><p>Variogram modeling (spherical, exponential, gaussian), Ordinary Kriging, Moran's I spatial autocorrelation, Getis-Ord Gi* hot-spot analysis.</p></div>
@@ -184,7 +184,7 @@ footer{padding:40px 0;border-top:1px solid var(--border);text-align:center;color
 <h2>Pricing</h2>
 <p class="subtitle">Free forever for self-hosted. Managed plans for teams who want to focus on their work, not infrastructure.</p>
 <div class="pricing-grid">
-<div class="price-card"><h3>Community</h3><div class="price">$0</div><p class="period">forever</p><ul><li>Self-hosted (Docker Compose)</li><li>All 19 modules</li><li>Community support</li><li>AGPL-3.0 license</li><li>Unlimited users</li></ul><a href="https://github.com/GeoLang" class="outline">Get Started</a></div>
+<div class="price-card"><h3>Community</h3><div class="price">$0</div><p class="period">forever</p><ul><li>Self-hosted (Docker Compose)</li><li>All 20 modules</li><li>Community support</li><li>AGPL-3.0 license</li><li>Unlimited users</li></ul><a href="https://github.com/GeoLang" class="outline">Get Started</a></div>
 <div class="price-card"><h3>Pro</h3><div class="price">$49<span>/mo</span></div><p class="period">per user</p><ul><li>Managed hosting</li><li>GeoLang AI agent</li><li>10K queries/month</li><li>A2UI adaptive interfaces</li><li>Email support</li></ul><a href="#" class="outline">Coming Soon</a></div>
 <div class="price-card featured"><h3>Team</h3><div class="price">$199<span>/mo</span></div><p class="period">up to 10 users</p><ul><li>Everything in Pro</li><li>Ptolemy hosted geodatabase</li><li>Real-time collaboration</li><li>SSO / OIDC</li><li>Priority support</li></ul><a href="#" class="primary">Coming Soon</a></div>
 <div class="price-card"><h3>Enterprise</h3><div class="price">$999<span>/mo</span></div><p class="period">unlimited users</p><ul><li>Everything in Team</li><li>Dedicated infrastructure</li><li>SLA (99.9%)</li><li>Migration assistance</li><li>Custom model fine-tuning</li></ul><a href="#" class="outline">Contact Sales</a></div>
@@ -194,7 +194,7 @@ footer{padding:40px 0;border-top:1px solid var(--border);text-align:center;color
 
 <section class="stack">
 <div class="container">
-<h2>Built on 19 Open-Source Modules</h2>
+<h2>Built on 20 Open-Source Modules</h2>
 <div class="stack-list">
 <a class="stack-item" href="https://geolang.github.io/tiletopia"><span class="emoji">🏗️</span><div><div class="name">TileTopia</div><div class="desc">3D Tiles + vector tile server</div></div></a>
 <a class="stack-item" href="https://geolang.github.io/viewtopia"><span class="emoji">🌍</span><div><div class="name">ViewTopia</div><div class="desc">Unified viewer + A2UI</div></div></a>
@@ -215,6 +215,7 @@ footer{padding:40px 0;border-top:1px solid var(--border);text-align:center;color
 <a class="stack-item" href="https://geolang.github.io/terravista"><span class="emoji">📱</span><div><div class="name">TerraVista</div><div class="desc">Mobile SDK (camera, cache, routing)</div></div></a>
 <a class="stack-item" href="https://geolang.github.io/fenestra"><span class="emoji">🌐</span><div><div class="name">Fenestra</div><div class="desc">OGC WMS/WFS/WMTS + server-side rendering</div></div></a>
 <a class="stack-item" href="https://github.com/GeoLang/geolang"><span class="emoji">🤖</span><div><div class="name">GeoLang</div><div class="desc">AI agent</div></div></a>
+<a class="stack-item" href="https://github.com/GeoLang/sibyl"><span class="emoji">🔮</span><div><div class="name">Sibyl</div><div class="desc">LLM agent loop + sessions</div></div></a>
 </div>
 </div>
 </section>
