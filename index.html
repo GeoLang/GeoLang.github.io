@@ -163,14 +163,14 @@ footer{padding:40px 0;border-top:1px solid var(--border);text-align:center;color
 <h2>Platform Capabilities</h2>
 <p class="subtitle">20 modules, 18 of them Rust-native. One unified platform.</p>
 <div class="feature-grid">
-<div class="feature-card"><div class="icon">🤖</div><h3>Natural Language Analysis</h3><p>GeoLang AI agent translates your questions into spatial operations. The sibyl agent loop drives 36 geospatial tools and keeps each session's history in SQLite.</p></div>
+<div class="feature-card"><div class="icon">🤖</div><h3>Natural Language Analysis</h3><p>GeoLang AI agent translates your questions into spatial operations. The sibyl agent loop drives 39 geospatial tools and keeps each session's history in SQLite.</p></div>
 <div class="feature-card"><div class="icon">🎨</div><h3>Adaptive UI (A2UI)</h3><p>Every response generates a custom interface — maps, charts, tables, forms — tailored to your specific question. No static dashboards.</p></div>
 <div class="feature-card"><div class="icon">🗄️</div><h3>Enterprise Geodatabase</h3><p>Git-like versioning for spatial data. Branch, commit, merge, diff. Role-based access, OIDC SSO, audit trails. PostGIS-powered.</p></div>
 <div class="feature-card"><div class="icon">🔬</div><h3>Geoprocessing</h3><p>Buffer, clip, intersect, dissolve, voronoi, spatial join, nearest neighbor, and distance matrix across Topoi, Geodukt, and Itinera. Geodukt's REST service exposes buffer, centroid, clip, dissolve, and simplify as GP-as-a-service.</p></div>
 <div class="feature-card"><div class="icon">🌐</div><h3>3D / Digital Twin</h3><p>3D Tiles, terrain, point cloud visualization. Indoor mapping with BLE/WiFi positioning. Martin integration for PMTiles + PostGIS vector tiles.</p></div>
 <div class="feature-card"><div class="icon">🚗</div><h3>Routing &amp; Network Analysis</h3><p>Shortest path, isochrones, network graph analytics (OD matrix, centrality, connected components). OpenStreetMap-powered.</p></div>
-<div class="feature-card"><div class="icon">📡</div><h3>Field Collection</h3><p>XLSForm import and 20+ field types with local SQLite persistence and an offline sync queue with exponential backoff. Media attachments and a mobile client are on the roadmap.</p></div>
-<div class="feature-card"><div class="icon">📱</div><h3>Mobile SDK</h3><p>Rust-native mobile SDK for iOS and Android with camera, tile cache, and routing over FFI. GPU rendering, tile fetch, and MVT decode are on the roadmap.</p></div>
+<div class="feature-card"><div class="icon">📡</div><h3>Field Collection</h3><p>XLSForm import and 20+ field types with local SQLite persistence, an offline sync queue, and media attachments. A native mobile client is on the roadmap.</p></div>
+<div class="feature-card"><div class="icon">📱</div><h3>Mobile SDK</h3><p>Rust-native mobile SDK. The Android library fetches tiles over HTTP and draws on Canvas, including MVT. Metal/Vulkan backends are on the roadmap.</p></div>
 <div class="feature-card"><div class="icon">🛰️</div><h3>EO &amp; Remote Sensing</h3><p>COG streaming, EO time-series analysis (composites, trend fitting, change detection, anomaly scores, phenology). Panoptes segments imagery through ONNX Runtime, falling back to a threshold heuristic until model weights ship.</p></div>
 <div class="feature-card"><div class="icon">📊</div><h3>Portal &amp; Dashboards</h3><p>Content catalog for maps, layers, and datasets. Configurable real-time dashboards with map, chart, indicator, gauge, and list widgets.</p></div>
 <div class="feature-card"><div class="icon">📐</div><h3>WASM Computational Geometry</h3><p>Topoi WASM SDK — convex hull, Delaunay, buffer, clip, simplify, and spatial predicates running in the browser at near-native speed.</p></div>
@@ -228,7 +228,7 @@ footer{padding:40px 0;border-top:1px solid var(--border);text-align:center;color
 <a href="https://github.com/GeoLang" class="btn-primary">Get Started Free</a>
 </div>
 <p style="margin-top:20px;font-family:monospace;color:var(--muted);font-size:.9rem">
-docker compose -f docker-compose.platform.yml up --build<br>
+docker compose -f viewtopia/docker-compose.platform.yml up --build<br>
 <span style="color:var(--accent);"># or all-in-one single container:</span><br>
 docker run -p 3000:3000 -p 3003:3003 -p 3100:3100 geolang/allinone
 </p>
