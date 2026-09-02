@@ -313,7 +313,7 @@ cargo llvm-cov --all-features --workspace --lcov --output-path lcov.info
 <li>Unsafe Rust is kept at native library, plugin, GPU, and FFI boundaries</li>
 <li>Input validation at all API boundaries</li>
 <li>Parameterized queries for PostGIS (no SQL injection)</li>
-<li>TLS required for all external connections</li>
+<li>TLS: the hosted deployment serves HTTPS only at its CloudFront edge. The self-hosted Compose stack serves plain HTTP on port 8080 and expects your own TLS terminator in front</li>
 <li>Secrets via environment variables, never hardcoded</li>
 </ul>
 
