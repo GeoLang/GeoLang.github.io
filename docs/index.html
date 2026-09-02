@@ -82,46 +82,53 @@ footer{padding:40px 0;border-top:1px solid var(--border);margin-top:80px;text-al
 
 <div class="mermaid-wrapper">
 <pre><code>┌─────────────────────────────────────────────────────────────────────┐
-│                            User Interface                           │
 │                                                                     │
-│  ViewTopia (React)                          GeoLang (agent API)     │
-│  :5174                                      :8080                   │
-└────────┬────────────────────────────────────────────┬───────────────┘
-         │                                            │
-         │                                            ▼
-         │                         ┌──────────────────────────────┐
-         │                         │  Sibyl (agent loop)  :8090   │
-         │                         │  LLM calls, sqlite sessions, │
-         │                         │  tool dispatch back to :8080 │
-         │                         └──────────────────────────────┘
-         ▼
-┌─────────────────────────────────────────────────────────────────────┐
-│                            Service Layer                            │
+│      Browser: the ViewTopia SPA, served by nginx on :5174.          │
+│      Every backend is reached same-origin through that proxy.       │
 │                                                                     │
-│  TileTopia  Ptolemy   Geokode   Itinera   Fenestra   Agora         │
-│  :3100      :3000     :3001     :3002     :3003      /agora       │
-│  (tiles)    (features)(geocode) (routing) (OGC APIs) (live docs)   │
-└────────┬─────────┬──────────┬──────────┬──────────┬─────────────────┘
-         │         │          │          │          │
-         ▼         ▼          ▼          ▼          ▼
-┌─────────────────────────────────────────────────────────────────────┐
-│                            Core Libraries                           │
-│                                                                     │
-│  Topoi        Projicio    Terrano     Nubis       Jung              │
-│  (geometry)   (proj)      (raster)    (points)    (cartography)     │
-│                                                                     │
-│  GeoGit       Fluvius     Panoptes    GeoDukt     Collecta          │
-│  (versioning) (streams)   (imagery)   (pipelines) (forms)           │
-│                                                                     │
-│  TerraVista   Interiora    Geoplumb    Verne                        │
-│  (mobile)     (indoor)     (raster)    (migration)                  │
 └─────────────────────────────────────────────────────────────────────┘
-         │
-         ▼
+                                 │
+                                 ▼
 ┌─────────────────────────────────────────────────────────────────────┐
-│                              Data Layer                             │
+│                        Proxied services                             │
 │                                                                     │
-│  PostGIS :5432          Object Storage          File System         │
+│  /api/*                     ptolemy    features, geoprocessing      │
+│  /tiles/*  /martin/*        tiletopia  3D Tiles, terrain, COG       │
+│  /api/v1/auth/  .../portal/ tiletopia  tokens, portal catalog       │
+│  /api/geocode/*             geokode    forward, reverse, complete   │
+│  /api/route  /api/network/  itinera    routing, isochrones, graph   │
+│  /ogc/*                     fenestra   WMS, WFS, WMTS, WCS, API     │
+│  /agora/*                   agora      live shared map documents    │
+│  /collecta/*                collecta   OpenRosa, field submissions  │
+│  /plumb/*                   geoplumb   windowed raster tiles        │
+│  /api/indoor/*              interiora  venues, indoor wayfinding    │
+│  /api/pipeline/runs         geodukt    ETL manifest runs            │
+│  /jupyter/*                 jupyter    notebook kernels             │
+│  /agent/*                   geolang    NL to GIS tools, executor    │
+│                                                                     │
+│  geolang hands each run to sibyl, which calls the LLM, keeps        │
+│  sessions in sqlite, and dispatches tool calls back to /tools.      │
+│  fenestra reads its features from ptolemy's REST API.               │
+└─────────────────────────────────────────────────────────────────────┘
+                                 │
+                                 ▼
+┌─────────────────────────────────────────────────────────────────────┐
+│                    Libraries and command lines                      │
+│                                                                     │
+│  topoi (geometry)      projicio (CRS)      terrano (raster)         │
+│  nubis (point clouds)  jung (cartography)  fluvius (streams)        │
+│  panoptes (imagery ML) geogit (geodata VCS, CLI)                    │
+│  verne (foreign-format migration, CLI)                              │
+│  terravista (mobile SDK, Android over a C FFI)                      │
+└─────────────────────────────────────────────────────────────────────┘
+                                 │
+                                 ▼
+┌─────────────────────────────────────────────────────────────────────┐
+│                            Data layer                               │
+│                                                                     │
+│  PostGIS :5432, one database for ptolemy and one for agora.         │
+│  Only ptolemy and agora talk to it. Tiles, sessions and field       │
+│  submissions live in per-service volumes.                           │
 └─────────────────────────────────────────────────────────────────────┘</code></pre>
 </div>
 
@@ -135,42 +142,43 @@ footer{padding:40px 0;border-top:1px solid var(--border);margin-top:80px;text-al
 </ul>
 
 <h2 id="repositories">Repository Map</h2>
+<p>Test counts are declarations in the source: <code>#[test]</code> and <code>#[tokio::test]</code> for Rust, <code>def test_</code> for Python, <code>it()</code> and <code>test()</code> for Vitest and Playwright.</p>
 
 <table>
 <thead>
 <tr><th>Repository</th><th>Purpose</th><th>Type</th><th>Tests</th><th>Docs</th></tr>
 </thead>
 <tbody>
-<tr><td><a href="https://github.com/GeoLang/agora">agora</a></td><td>Live shared map documents with ordered operations, presence, comments, and share links</td><td><span class="badge badge-purple">Server</span></td><td>85</td><td>n/a</td></tr>
-<tr><td><a href="https://github.com/GeoLang/tiletopia">tiletopia</a></td><td>3D Tiles + vector tile server with MVT, terrain, and point cloud support</td><td><span class="badge badge-purple">Server</span></td><td>694</td><td><a href="https://geolang.github.io/tiletopia/">API</a></td></tr>
-<tr><td><a href="https://github.com/GeoLang/viewtopia">viewtopia</a></td><td>React web viewer: CesiumJS globe, MapLibre GL with deck.gl overlays, Leaflet 2D</td><td><span class="badge badge-green">UI</span></td><td>347 unit tests + 18 platform E2E tests</td><td><a href="https://geolang.github.io/viewtopia/">App</a></td></tr>
-<tr><td><a href="https://github.com/GeoLang/itinera">itinera</a></td><td>Turn-by-turn routing engine with contraction hierarchies</td><td><span class="badge badge-purple">Server</span></td><td>74</td><td><a href="https://geolang.github.io/itinera/">API</a></td></tr>
-<tr><td><a href="https://github.com/GeoLang/geokode">geokode</a></td><td>Geocoding with FST text index and R-tree spatial search</td><td><span class="badge badge-purple">Server</span></td><td>72</td><td><a href="https://geolang.github.io/geokode/">API</a></td></tr>
-<tr><td><a href="https://github.com/GeoLang/nubis">nubis</a></td><td>Point cloud processing, geostatistics, and spatial analysis</td><td><span class="badge badge-yellow">Library</span></td><td>161</td><td><a href="https://geolang.github.io/nubis/">API</a></td></tr>
-<tr><td><a href="https://github.com/GeoLang/terrano">terrano</a></td><td>Raster algebra, terrain analysis, and contour generation</td><td><span class="badge badge-yellow">Library</span></td><td>140</td><td><a href="https://geolang.github.io/terrano/">API</a></td></tr>
-<tr><td><a href="https://github.com/GeoLang/ptolemy">ptolemy</a></td><td>Versioned PostGIS feature store with branch, diff, merge, audit, and spatial APIs</td><td><span class="badge badge-purple">Server</span></td><td>587</td><td><a href="https://geolang.github.io/ptolemy/">API</a></td></tr>
-<tr><td><a href="https://github.com/GeoLang/geodukt">geodukt</a></td><td>Validated, lineage-tracked geospatial pipeline manifests and execution</td><td><span class="badge badge-yellow">Library</span></td><td>216</td><td><a href="https://geolang.github.io/geodukt/">API</a></td></tr>
-<tr><td><a href="https://github.com/GeoLang/geoplumb">geoplumb</a></td><td>Windowed raster analysis over COG and STAC sources, including temporal composites and zonal statistics</td><td><span class="badge badge-purple">Server</span></td><td>155</td><td>n/a</td></tr>
-<tr><td><a href="https://github.com/GeoLang/geogit">geogit</a></td><td>Geospatial data versioning and diff</td><td><span class="badge badge-yellow">Library</span></td><td>73</td><td><a href="https://geolang.github.io/geogit/">API</a></td></tr>
-<tr><td><a href="https://github.com/GeoLang/jung">jung</a></td><td>Cartographic rendering + symbology engine</td><td><span class="badge badge-yellow">Library</span></td><td>307</td><td><a href="https://geolang.github.io/jung/">API</a></td></tr>
-<tr><td><a href="https://github.com/GeoLang/fluvius">fluvius</a></td><td>Real-time geospatial stream processing (GPS, IoT, telemetry)</td><td><span class="badge badge-yellow">Library</span></td><td>182</td><td><a href="https://geolang.github.io/fluvius/">API</a></td></tr>
-<tr><td><a href="https://github.com/GeoLang/panoptes">panoptes</a></td><td>AI feature extraction from satellite and aerial imagery</td><td><span class="badge badge-yellow">Library</span></td><td>45</td><td><a href="https://geolang.github.io/panoptes/">API</a></td></tr>
-<tr><td><a href="https://github.com/GeoLang/projicio">projicio</a></td><td>Coordinate projection and datum transformation</td><td><span class="badge badge-yellow">Library</span></td><td>98</td><td><a href="https://geolang.github.io/projicio/">API</a></td></tr>
-<tr><td><a href="https://github.com/GeoLang/topoi">topoi</a></td><td>Computational geometry: hull, Delaunay, predicates, simplification</td><td><span class="badge badge-yellow">Library</span></td><td>246</td><td><a href="https://geolang.github.io/topoi/">API</a></td></tr>
-<tr><td><a href="https://github.com/GeoLang/fenestra">fenestra</a></td><td>OGC API Features/Tiles/Processes server</td><td><span class="badge badge-purple">Server</span></td><td>83</td><td><a href="https://geolang.github.io/fenestra/">API</a></td></tr>
-<tr><td><a href="https://github.com/GeoLang/terravista">terravista</a></td><td>Mobile navigation SDK with camera, tiles, and routing</td><td><span class="badge badge-yellow">Library</span></td><td>107</td><td><a href="https://geolang.github.io/terravista/">API</a></td></tr>
-<tr><td><a href="https://github.com/GeoLang/collecta">collecta</a></td><td>Geospatial form builder and field data collection</td><td><span class="badge badge-yellow">Library</span></td><td>111</td><td><a href="https://geolang.github.io/collecta/">API</a></td></tr>
-<tr><td><a href="https://github.com/GeoLang/interiora">interiora</a></td><td>Indoor mapping, routing, and positioning</td><td><span class="badge badge-yellow">Library</span></td><td>82</td><td><a href="https://geolang.github.io/interiora/">API</a></td></tr>
-<tr><td><a href="https://github.com/GeoLang/sibyl">sibyl</a></td><td>LLM agent loop: OpenAI-compatible chat completions, sqlite sessions, HTTP tool dispatch</td><td><span class="badge badge-purple">Server</span></td><td>87</td><td>n/a</td></tr>
-<tr><td><a href="https://github.com/GeoLang/geolang">geolang</a></td><td>NL→GIS agent: tools, persona, and viewer protocol (Python)</td><td><span class="badge badge-purple">Server</span></td><td>183</td><td>n/a</td></tr>
-<tr><td><a href="https://github.com/GeoLang/verne">verne</a></td><td>Read-only inventory and extraction of foreign GIS sources (KML/KMZ, Esri File Geodatabase, hosted ArcGIS) with a fidelity report</td><td><span class="badge badge-yellow">CLI</span></td><td>230</td><td>n/a</td></tr>
+<tr><td><a href="https://github.com/GeoLang/agora">agora</a></td><td>Live shared map documents with ordered operations, presence, comments, and share links</td><td><span class="badge badge-purple">Server</span></td><td>235</td><td><a href="https://geolang.github.io/agora/">Page</a></td></tr>
+<tr><td><a href="https://github.com/GeoLang/tiletopia">tiletopia</a></td><td>3D Tiles server: point clouds, meshes, IFC, quantized-mesh terrain, COG assets, and PMTiles vector tilesets</td><td><span class="badge badge-purple">Server</span></td><td>936</td><td><a href="https://geolang.github.io/tiletopia/">API</a></td></tr>
+<tr><td><a href="https://github.com/GeoLang/viewtopia">viewtopia</a></td><td>React web viewer: CesiumJS globe, MapLibre GL with deck.gl overlays, Leaflet 2D</td><td><span class="badge badge-green">UI</span></td><td>2,068 unit tests + 35 platform E2E tests</td><td><a href="https://geolang.github.io/viewtopia/">App</a></td></tr>
+<tr><td><a href="https://github.com/GeoLang/itinera">itinera</a></td><td>Turn-by-turn routing engine with contraction hierarchies</td><td><span class="badge badge-purple">Server</span></td><td>105</td><td><a href="https://geolang.github.io/itinera/">API</a></td></tr>
+<tr><td><a href="https://github.com/GeoLang/geokode">geokode</a></td><td>Geocoding with FST text index and R-tree spatial search</td><td><span class="badge badge-purple">Server</span></td><td>79</td><td><a href="https://geolang.github.io/geokode/">API</a></td></tr>
+<tr><td><a href="https://github.com/GeoLang/nubis">nubis</a></td><td>Point cloud processing, geostatistics, and spatial analysis</td><td><span class="badge badge-yellow">Library</span></td><td>165</td><td><a href="https://geolang.github.io/nubis/">API</a></td></tr>
+<tr><td><a href="https://github.com/GeoLang/terrano">terrano</a></td><td>Raster algebra, terrain analysis, and contour generation</td><td><span class="badge badge-yellow">Library</span></td><td>180</td><td><a href="https://geolang.github.io/terrano/">API</a></td></tr>
+<tr><td><a href="https://github.com/GeoLang/ptolemy">ptolemy</a></td><td>Versioned PostGIS feature store with branch, diff, merge, audit, and spatial APIs</td><td><span class="badge badge-purple">Server</span></td><td>704</td><td><a href="https://geolang.github.io/ptolemy/">API</a></td></tr>
+<tr><td><a href="https://github.com/GeoLang/geodukt">geodukt</a></td><td>Validated, lineage-tracked geospatial pipeline manifests, run over HTTP or from the CLI</td><td><span class="badge badge-purple">Server</span></td><td>252</td><td><a href="https://geolang.github.io/geodukt/">API</a></td></tr>
+<tr><td><a href="https://github.com/GeoLang/geoplumb">geoplumb</a></td><td>Pull-based windowed compute over COG, STAC, GeoJSON, and LAS sources, served as XYZ tiles with zonal statistics</td><td><span class="badge badge-purple">Server</span></td><td>191</td><td>n/a</td></tr>
+<tr><td><a href="https://github.com/GeoLang/geogit">geogit</a></td><td>Geospatial data versioning and diff</td><td><span class="badge badge-yellow">Library</span></td><td>82</td><td><a href="https://geolang.github.io/geogit/">API</a></td></tr>
+<tr><td><a href="https://github.com/GeoLang/jung">jung</a></td><td>Cartographic rendering + symbology engine</td><td><span class="badge badge-yellow">Library</span></td><td>338</td><td><a href="https://geolang.github.io/jung/">API</a></td></tr>
+<tr><td><a href="https://github.com/GeoLang/fluvius">fluvius</a></td><td>Real-time geospatial stream processing (GPS, IoT, telemetry)</td><td><span class="badge badge-yellow">Library</span></td><td>224</td><td><a href="https://geolang.github.io/fluvius/">API</a></td></tr>
+<tr><td><a href="https://github.com/GeoLang/panoptes">panoptes</a></td><td>AI feature extraction from satellite and aerial imagery</td><td><span class="badge badge-yellow">Library</span></td><td>46</td><td><a href="https://geolang.github.io/panoptes/">API</a></td></tr>
+<tr><td><a href="https://github.com/GeoLang/projicio">projicio</a></td><td>Coordinate projection and datum transformation</td><td><span class="badge badge-yellow">Library</span></td><td>210</td><td><a href="https://geolang.github.io/projicio/">API</a></td></tr>
+<tr><td><a href="https://github.com/GeoLang/topoi">topoi</a></td><td>Computational geometry: hull, Delaunay, predicates, simplification</td><td><span class="badge badge-yellow">Library</span></td><td>258</td><td><a href="https://geolang.github.io/topoi/">API</a></td></tr>
+<tr><td><a href="https://github.com/GeoLang/fenestra">fenestra</a></td><td>OGC gateway over Ptolemy: WMS, WFS, WMTS, WCS, and OGC API Features and Tiles</td><td><span class="badge badge-purple">Server</span></td><td>155</td><td><a href="https://geolang.github.io/fenestra/">API</a></td></tr>
+<tr><td><a href="https://github.com/GeoLang/terravista">terravista</a></td><td>Mobile navigation SDK with camera, tiles, and routing</td><td><span class="badge badge-yellow">Library</span></td><td>130</td><td><a href="https://geolang.github.io/terravista/">API</a></td></tr>
+<tr><td><a href="https://github.com/GeoLang/collecta">collecta</a></td><td>Field data collection server: form schemas, submissions, XLSForm import, and an OpenRosa layer ODK Collect submits to</td><td><span class="badge badge-purple">Server</span></td><td>142</td><td><a href="https://geolang.github.io/collecta/">API</a></td></tr>
+<tr><td><a href="https://github.com/GeoLang/interiora">interiora</a></td><td>Indoor venue maps, wayfinding, and fingerprint positioning</td><td><span class="badge badge-purple">Server</span></td><td>82</td><td><a href="https://geolang.github.io/interiora/">API</a></td></tr>
+<tr><td><a href="https://github.com/GeoLang/sibyl">sibyl</a></td><td>LLM agent loop: OpenAI-compatible chat completions, sqlite sessions, HTTP tool dispatch</td><td><span class="badge badge-purple">Server</span></td><td>142</td><td>n/a</td></tr>
+<tr><td><a href="https://github.com/GeoLang/geolang">geolang</a></td><td>NL→GIS agent: 40 tools, persona, and viewer protocol (Python)</td><td><span class="badge badge-purple">Server</span></td><td>637</td><td>n/a</td></tr>
+<tr><td><a href="https://github.com/GeoLang/verne">verne</a></td><td>Read-only inventory and extraction of foreign GIS sources (KML/KMZ, Esri File Geodatabase, hosted ArcGIS) with a fidelity report</td><td><span class="badge badge-yellow">CLI</span></td><td>233</td><td><a href="https://geolang.github.io/verne/">Page</a></td></tr>
 </tbody>
 </table>
 
 <h2 id="infrastructure">Infrastructure &amp; CI/CD</h2>
 
 <h3>GitHub Actions Workflows</h3>
-<p>Every product repository has a CI workflow. Most Rust repositories also publish release binaries and rustdoc. ViewTopia adds full-stack Docker, panel, load, and platform end-to-end workflows.</p>
+<p>Every product repository has a CI workflow. Most Rust repositories also publish release binaries and rustdoc. ViewTopia adds full-stack Docker, panel sweep, load, and platform end-to-end workflows.</p>
 
 <div class="grid">
 <div class="card">
@@ -189,9 +197,9 @@ footer{padding:40px 0;border-top:1px solid var(--border);margin-top:80px;text-al
 
 <h3>Dependency Management</h3>
 <ul>
-<li><strong>Renovate</strong>: Weekly updates for Cargo dependencies and GitHub Actions. Each repo's <code>renovate.json</code> extends the shared policy in <a href="https://github.com/GeoLang/renovate-config">renovate-config</a></li>
+<li><strong>Renovate</strong>: Weekly updates for Cargo, npm, and GitHub Actions dependencies, grouped non-major and held three days after release. Each repo's <code>renovate.json</code> extends the shared policy in <a href="https://github.com/GeoLang/renovate-config">renovate-config</a></li>
 <li><strong>cargo-deny</strong>: License allowlist, ban duplicate detection, source verification</li>
-<li><strong>Allowed licenses</strong>: MIT, Apache-2.0, BSD-2/3-Clause, ISC, Unicode-3.0, Zlib, MPL-2.0, AGPL-3.0-or-later, CC0-1.0, WTFPL, NCSA, BSL-1.0, CDLA-Permissive-2.0</li>
+<li><strong>Allowed licenses</strong>: MIT, Apache-2.0, Apache-2.0 WITH LLVM-exception, BSD-2/3-Clause, ISC, Unicode-3.0, Unicode-DFS-2016, Zlib, MPL-2.0, AGPL-3.0-or-later, OpenSSL, CC0-1.0, WTFPL, NCSA, BSL-1.0, CDLA-Permissive-2.0. <code>ring</code> is the one per-crate exception</li>
 </ul>
 
 <h3>Templates &amp; Governance</h3>
@@ -213,8 +221,10 @@ rustup component add clippy rustfmt llvm-tools-preview
 # Tools
 cargo install cargo-deny cargo-llvm-cov
 
-# For server development
-docker compose up -d  # PostGIS, etc.
+# For server development, bring up the platform stack from viewtopia.
+# scripts/platform-up.sh generates the shared JWT secret into .env.platform,
+# fetches the OSM extract, and waits on every healthcheck.
+cd viewtopia && ./scripts/platform-up.sh
 </code></pre>
 
 <h3>Clone All Repos</h3>
@@ -237,7 +247,7 @@ cargo deny check licenses sources bans
 </code></pre>
 
 <h3>Docker Compose (Development)</h3>
-<pre><code># Service ports:
+<pre><code># Published host ports:
 # PostGIS        → :5432
 # Ptolemy        → :3000
 # TileTopia      → :3100
@@ -247,6 +257,11 @@ cargo deny check licenses sources bans
 # ViewTopia      → :5174
 # GeoLang Agent  → :8080
 # Sibyl          → :8090
+#
+# agora, collecta, geoplumb, interiora, geodukt and jupyter publish no
+# host port. They are reachable only through the ViewTopia nginx proxy
+# on :5174, at /agora/, /collecta/, /plumb/, /api/indoor/,
+# /api/pipeline/runs and /jupyter/.
 </code></pre>
 
 <h2 id="testing">Testing Strategy</h2>
@@ -256,7 +271,8 @@ cargo deny check licenses sources bans
 <li><strong>Unit tests</strong>: In-module <code>#[cfg(test)]</code> blocks for internal logic</li>
 <li><strong>Integration tests</strong>: <code>crates/{name}-core/tests/</code> for public API exercising</li>
 <li><strong>Benchmarks</strong>: <code>crates/{name}-core/benches/</code> using Criterion (topoi, projicio, geokode)</li>
-<li><strong>Load tests</strong>: <a href="https://github.com/GeoLang/viewtopia/tree/master/loadtest">viewtopia/loadtest</a>, k6 against the full stack, nightly</li>
+<li><strong>Load tests</strong>: <a href="https://github.com/GeoLang/viewtopia/tree/master/loadtest">viewtopia/loadtest</a>, k6 against the full stack, nightly. The k6 thresholds are the pass/fail</li>
+<li><strong>Platform end-to-end</strong>: 35 Playwright tests in <code>viewtopia/tests/e2e</code> run by <code>playwright.platform.config.js</code> against the composed stack, no stubs</li>
 <li><strong>Coverage</strong>: <code>cargo llvm-cov</code> with reports uploaded to Codecov in CI</li>
 </ul>
 
@@ -284,7 +300,7 @@ cargo llvm-cov --all-features --workspace --lcov --output-path lcov.info
 <h2 id="security">Security &amp; Supply Chain</h2>
 
 <h3>cargo-deny Configuration</h3>
-<p>Every repository includes a <code>deny.toml</code> that enforces:</p>
+<p>Every Rust repository except sibyl includes a <code>deny.toml</code> that enforces:</p>
 <ul>
 <li><strong>License compliance</strong>: Only pre-approved FOSS licenses</li>
 <li><strong>Advisory database</strong>: RUSTSEC vulnerability checks (informational in CI)</li>
@@ -315,9 +331,10 @@ cargo llvm-cov --all-features --workspace --lcov --output-path lcov.info
 <pre><code># Build any server component
 docker build -t geolang/ptolemy:latest -f Dockerfile .
 
-# From the suite checkout
+# The whole platform, from the viewtopia checkout
 cd viewtopia
-./scripts/platform-up.sh
+./scripts/platform-up.sh              # or, with .env.platform already written:
+docker compose --env-file .env.platform -f docker-compose.platform.yml up --build
 </code></pre>
 
 <h3>Production Notes</h3>
@@ -329,13 +346,13 @@ cd viewtopia
 </ul>
 
 <h2 id="api">API Reference</h2>
-<p>Rust repositories with a documentation workflow publish rustdoc to GitHub Pages:</p>
+<p>Each repository below publishes a project page at <code>https://geolang.github.io/{repo}/</code>, with its rustdoc underneath at <code>/api/</code>. Jung is the exception: its rustdoc has no redirect at <code>/api/</code>, so enter it at <code>/jung/api/jung_core/index.html</code>.</p>
 <div class="grid">
-<div class="card"><h4><a href="https://geolang.github.io/tiletopia/">TileTopia</a></h4><p>Tile serving, MVT generation, terrain mesh</p></div>
+<div class="card"><h4><a href="https://geolang.github.io/tiletopia/">TileTopia</a></h4><p>3D Tiles, terrain mesh, COG assets, PMTiles</p></div>
 <div class="card"><h4><a href="https://geolang.github.io/ptolemy/">Ptolemy</a></h4><p>Feature CRUD, spatial queries, PostGIS</p></div>
 <div class="card"><h4><a href="https://geolang.github.io/geokode/">Geokode</a></h4><p>Forward/reverse geocoding, address parsing</p></div>
 <div class="card"><h4><a href="https://geolang.github.io/itinera/">Itinera</a></h4><p>Shortest path, contraction hierarchies</p></div>
-<div class="card"><h4><a href="https://geolang.github.io/fenestra/">Fenestra</a></h4><p>OGC API Features, Tiles, Processes</p></div>
+<div class="card"><h4><a href="https://geolang.github.io/fenestra/">Fenestra</a></h4><p>WMS, WFS, WMTS, WCS, OGC API Features and Tiles</p></div>
 <div class="card"><h4><a href="https://geolang.github.io/topoi/">Topoi</a></h4><p>Geometry, predicates, algorithms, Delaunay</p></div>
 <div class="card"><h4><a href="https://geolang.github.io/projicio/">Projicio</a></h4><p>Projections, datum transforms, EPSG</p></div>
 <div class="card"><h4><a href="https://geolang.github.io/terrano/">Terrano</a></h4><p>Raster algebra, terrain, contours, hydrology</p></div>

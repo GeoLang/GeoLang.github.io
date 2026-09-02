@@ -161,20 +161,20 @@ footer{padding:40px 0;border-top:1px solid var(--border);text-align:center;color
 <section class="features">
 <div class="container">
 <h2>Platform Capabilities</h2>
-<p class="subtitle">20 modules, 18 of them Rust-native. One unified platform.</p>
+<p class="subtitle">23 modules, 21 of them Rust-native. One unified platform.</p>
 <div class="feature-grid">
-<div class="feature-card"><div class="icon">🤖</div><h3>Natural Language Analysis</h3><p>GeoLang AI agent translates your questions into spatial operations. The sibyl agent loop drives 39 geospatial tools and keeps each session's history in SQLite.</p></div>
-<div class="feature-card"><div class="icon">🎨</div><h3>Adaptive UI (A2UI)</h3><p>Every response generates a custom interface — maps, charts, tables, forms — tailored to your specific question. No static dashboards.</p></div>
-<div class="feature-card"><div class="icon">🗄️</div><h3>Enterprise Geodatabase</h3><p>Git-like versioning for spatial data. Branch, commit, merge, diff. Role-based access, OIDC SSO. PostGIS-powered. Audit log writes have no callers.</p></div>
+<div class="feature-card"><div class="icon">🤖</div><h3>Natural Language Analysis</h3><p>GeoLang AI agent translates your questions into spatial operations. The sibyl agent loop drives 40 geospatial tools and keeps each session's history in SQLite.</p></div>
+<div class="feature-card"><div class="icon">🎨</div><h3>The agent drives the viewer (AG-UI)</h3><p>Every run carries the map state and the viewer's own action catalogue, so the agent runs the panels you would have clicked. Its answers come back as a UI spec the viewer renders: a map of named layers with colours or a shading column, an output image, or a table.</p></div>
+<div class="feature-card"><div class="icon">🗄️</div><h3>Enterprise Geodatabase</h3><p>Git-like versioning for spatial data. Branch, commit, merge, diff. Role-based access, OIDC SSO. PostGIS-powered. Every mutation that answers 2xx writes an audit row, readable at <code>/api/v1/audit</code> by an instance admin.</p></div>
 <div class="feature-card"><div class="icon">🤝</div><h3>Live Collaboration</h3><p>Agora holds a shared map as one document — layers, annotations, bookmarks, comments — orders every edit and fans it out to everyone viewing. Per-document members, share links, comment mentions, per-user undo.</p></div>
 <div class="feature-card"><div class="icon">🧳</div><h3>ArcGIS Migration</h3><p>Verne inventories a KML/KMZ, Esri file geodatabase, or hosted ArcGIS feature service and reports, item by item, what GeoLang holds faithfully, approximates, or has no home for. It then extracts features, semantics, and attachments and loads them into the geodatabase. The source is never written to.</p></div>
-<div class="feature-card"><div class="icon">🔬</div><h3>Geoprocessing</h3><p>Buffer, clip, intersect, dissolve, voronoi, spatial join, nearest neighbor, and distance matrix across Topoi, Geodukt, and Itinera. Geodukt's REST service exposes buffer, centroid, clip, dissolve, and simplify as GP-as-a-service.</p></div>
-<div class="feature-card"><div class="icon">🌐</div><h3>3D Tiles</h3><p>Point-cloud 3D Tiles and quantized-mesh terrain from TileTopia. Mesh, vector and BIM readers exist. The tiling job queue does not call them.</p></div>
+<div class="feature-card"><div class="icon">🔬</div><h3>Geoprocessing</h3><p>Ptolemy runs clip, intersect, difference, dissolve, spatial join, voronoi, convex hull, centroid, nearest neighbour, distance matrix, contour, merge, split, simplify and densify on a branch, and buffer as an analytics route. Geodukt's REST service exposes buffer, centroid, clip, dissolve, and simplify as GP-as-a-service.</p></div>
+<div class="feature-card"><div class="icon">🌐</div><h3>3D Tiles</h3><p>TileTopia tiles point clouds, meshes (glTF, glb, OBJ, FBX, CityGML) and IFC with its own tiler, and GeoJSON, GeoPackage and KML through mago-3d-tiler. Quantized-mesh terrain from a DEM or a prebuilt bundle. IFC tiles carry each element's GlobalId, so a picked tile feature reads its id back. DAE is the one format neither tiler takes.</p></div>
 <div class="feature-card"><div class="icon">🚗</div><h3>Routing &amp; Network Analysis</h3><p>Shortest path, isochrones, network graph analytics (OD matrix, centrality, connected components). OpenStreetMap-powered.</p></div>
-<div class="feature-card"><div class="icon">📡</div><h3>Field Collection</h3><p>XLSForm import and 20+ field types with local SQLite persistence, an offline sync queue, and media attachments. A native mobile client is on the roadmap.</p></div>
+<div class="feature-card"><div class="icon">📡</div><h3>Field Collection</h3><p>Collecta is the server: XLSForm import, 20 field types, SQLite persistence, an offline sync queue in the CLI client, and media attachments. ODK Collect fills the forms in over an OpenRosa layer, and publishing a form writes its submissions into a Ptolemy dataset. A field app of our own is on the roadmap.</p></div>
 <div class="feature-card"><div class="icon">📱</div><h3>Mobile SDK</h3><p>Rust-native mobile SDK. The Android library fetches tiles over HTTP and draws on Canvas, including MVT. Metal/Vulkan backends are on the roadmap.</p></div>
-<div class="feature-card"><div class="icon">🛰️</div><h3>EO &amp; Remote Sensing</h3><p>COG streaming, EO time-series analysis (composites, trend fitting, change detection, anomaly scores, phenology). Panoptes segments imagery through ONNX Runtime, falling back to a threshold heuristic until model weights ship.</p></div>
-<div class="feature-card"><div class="icon">📊</div><h3>Portal &amp; Dashboards</h3><p>Content catalog for maps, layers, and datasets. Configurable real-time dashboards with map, chart, indicator, gauge, and list widgets.</p></div>
+<div class="feature-card"><div class="icon">🛰️</div><h3>EO &amp; Remote Sensing</h3><p>COG streaming, EO time-series analysis (composites, trend fitting, change detection, anomaly scores, phenology). Panoptes segments imagery through ONNX Runtime. Building weights are published as a release asset. Roads, vegetation and landcover have none and run a threshold heuristic instead.</p></div>
+<div class="feature-card"><div class="icon">📊</div><h3>Portal &amp; Dashboards</h3><p>Content catalog for maps, layers, and datasets. Configurable dashboards with map, chart, indicator, gauge, list, and rich-text widgets.</p></div>
 <div class="feature-card"><div class="icon">📐</div><h3>WASM Computational Geometry</h3><p>Topoi WASM SDK — convex hull, Delaunay, buffer, clip, simplify, and spatial predicates running in the browser at near-native speed.</p></div>
 <div class="feature-card"><div class="icon">📈</div><h3>Geostatistics</h3><p>Variogram modeling (spherical, exponential, gaussian), Ordinary Kriging, Moran's I spatial autocorrelation, Getis-Ord Gi* hot-spot analysis.</p></div>
 </div>
@@ -193,10 +193,10 @@ footer{padding:40px 0;border-top:1px solid var(--border);text-align:center;color
 
 <section class="stack">
 <div class="container">
-<h2>Built on 22 Open-Source Modules</h2>
+<h2>Built on 23 Open-Source Modules</h2>
 <div class="stack-list">
 <a class="stack-item" href="https://geolang.github.io/tiletopia"><span class="emoji">🏗️</span><div><div class="name">TileTopia</div><div class="desc">Point-cloud 3D Tiles + terrain</div></div></a>
-<a class="stack-item" href="https://geolang.github.io/viewtopia"><span class="emoji">🌍</span><div><div class="name">ViewTopia</div><div class="desc">Unified viewer + A2UI</div></div></a>
+<a class="stack-item" href="https://geolang.github.io/viewtopia"><span class="emoji">🌍</span><div><div class="name">ViewTopia</div><div class="desc">Unified viewer + agent</div></div></a>
 <a class="stack-item" href="https://geolang.github.io/ptolemy"><span class="emoji">🗄️</span><div><div class="name">Ptolemy</div><div class="desc">Enterprise geodatabase</div></div></a>
 <a class="stack-item" href="https://geolang.github.io/itinera"><span class="emoji">🚗</span><div><div class="name">Itinera</div><div class="desc">Routing + network analysis</div></div></a>
 <a class="stack-item" href="https://geolang.github.io/geokode"><span class="emoji">📍</span><div><div class="name">Geokode</div><div class="desc">Geocoding + OSM ingest</div></div></a>
@@ -205,6 +205,7 @@ footer{padding:40px 0;border-top:1px solid var(--border);text-align:center;color
 <a class="stack-item" href="https://geolang.github.io/panoptes"><span class="emoji">👁️</span><div><div class="name">Panoptes</div><div class="desc">AI/ML imagery</div></div></a>
 <a class="stack-item" href="https://geolang.github.io/geodukt"><span class="emoji">🔄</span><div><div class="name">Geodukt</div><div class="desc">ETL + GP service</div></div></a>
 <a class="stack-item" href="https://geolang.github.io/fluvius"><span class="emoji">🌊</span><div><div class="name">Fluvius</div><div class="desc">Real-time geospatial stream processing</div></div></a>
+<a class="stack-item" href="https://github.com/GeoLang/geoplumb"><span class="emoji">🧮</span><div><div class="name">Geoplumb</div><div class="desc">Windowed raster compute + tiles</div></div></a>
 <a class="stack-item" href="https://geolang.github.io/agora"><span class="emoji">🤝</span><div><div class="name">Agora</div><div class="desc">Live map collaboration</div></div></a>
 <a class="stack-item" href="https://geolang.github.io/verne"><span class="emoji">🧳</span><div><div class="name">Verne</div><div class="desc">Migration from ArcGIS, KML, file geodatabases</div></div></a>
 <a class="stack-item" href="https://geolang.github.io/projicio"><span class="emoji">📐</span><div><div class="name">Projicio</div><div class="desc">CRS transforms</div></div></a>
@@ -229,9 +230,10 @@ footer{padding:40px 0;border-top:1px solid var(--border);text-align:center;color
 <a href="https://github.com/GeoLang" class="btn-primary">Get Started Free</a>
 </div>
 <p style="margin-top:20px;font-family:monospace;color:var(--muted);font-size:.9rem">
-docker compose -f viewtopia/docker-compose.platform.yml up --build<br>
-<span style="color:var(--accent);"># or all-in-one single container:</span><br>
-docker run -p 3000:3000 -p 3003:3003 -p 3100:3100 geolang/allinone
+cd viewtopia &amp;&amp; ./scripts/platform-up.sh<br>
+<span style="color:var(--accent);"># or one container with PostGIS, Ptolemy, Fenestra and TileTopia,<br># built from the directory holding the repos:</span><br>
+docker build -f viewtopia/Dockerfile.allinone -t geolang-allinone .<br>
+docker run -p 3000:3000 -p 3003:3003 -p 3100:3100 -p 5432:5432 geolang-allinone
 </p>
 </div>
 </section>
