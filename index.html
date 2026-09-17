@@ -108,8 +108,8 @@ footer{padding:40px 0;border-top:1px solid var(--border);text-align:center;color
 
 <section class="demo">
 <div class="container">
-<h2>See It in Action</h2>
-<p>One prompt replaces 20 clicks in traditional GIS software.</p>
+<h2>What a Prompt Looks Like</h2>
+<p>A mock-up, not a captured session. The agent answers with a map of named layers, an image, or a table.</p>
 <div class="demo-box">
 <div class="demo-prompt">Show me all parcels within 500m of the new transit stop that are zoned commercial and under 50% lot coverage</div>
 <div class="demo-response">
@@ -135,20 +135,17 @@ footer{padding:40px 0;border-top:1px solid var(--border);text-align:center;color
 <div class="compare-card old">
 <h3>The Old Way</h3>
 <ul>
-<li>$50K+/yr software licenses</li>
-<li>6 months training to be productive</li>
-<li>Click through 20 menus for one analysis</li>
-<li>Hire a GIS specialist for every question</li>
+<li>Paid licences, priced per seat</li>
+<li>Training before you are productive</li>
+<li>A GIS specialist runs each analysis</li>
 <li>Vendor lock-in to proprietary formats</li>
-<li>Desktop-only, no real-time collaboration</li>
 </ul>
 </div>
 <div class="compare-card new">
 <h3>The GeoLang Way</h3>
 <ul>
 <li>Free self-hosted. No hosted product yet</li>
-<li>Productive in 5 minutes — just type</li>
-<li>One sentence = complete analysis + map</li>
+<li>Type the question in plain English</li>
 <li>Anyone on the team can ask spatial questions</li>
 <li>Open formats, open source, no lock-in</li>
 <li>Real-time collaboration, web-native</li>
@@ -163,19 +160,19 @@ footer{padding:40px 0;border-top:1px solid var(--border);text-align:center;color
 <h2>Platform Capabilities</h2>
 <p class="subtitle">23 modules, 21 of them Rust-native. One unified platform.</p>
 <div class="feature-grid">
-<div class="feature-card"><div class="icon">🤖</div><h3>Natural Language Analysis</h3><p>GeoLang AI agent translates your questions into spatial operations. The sibyl agent loop drives 40 geospatial tools and keeps each session's history in SQLite.</p></div>
+<div class="feature-card"><div class="icon">🤖</div><h3>Natural Language Analysis</h3><p>GeoLang AI agent translates your questions into spatial operations. The sibyl agent loop drives 41 geospatial tools and keeps each session's history in SQLite.</p></div>
 <div class="feature-card"><div class="icon">🎨</div><h3>The agent drives the viewer (AG-UI)</h3><p>Every run carries the map state and the viewer's own action catalogue, so the agent runs the panels you would have clicked. Its answers come back as a UI spec the viewer renders: a map of named layers with colours or a shading column, an output image, or a table.</p></div>
 <div class="feature-card"><div class="icon">🗄️</div><h3>Enterprise Geodatabase</h3><p>Git-like versioning for spatial data. Branch, commit, merge, diff. Role-based access, OIDC SSO. PostGIS-powered. Every mutation that answers 2xx writes an audit row, readable at <code>/api/v1/audit</code> by an instance admin.</p></div>
-<div class="feature-card"><div class="icon">🤝</div><h3>Live Collaboration</h3><p>Agora holds a shared map as one document — layers, annotations, bookmarks, comments — orders every edit and fans it out to everyone viewing. Per-document members, share links, comment mentions, per-user undo.</p></div>
+<div class="feature-card"><div class="icon">🤝</div><h3>Live Collaboration</h3><p>Agora holds a shared map as one document of layers, annotations, bookmarks and comments, orders every edit and fans it out to everyone viewing. Per-document members, share links and comment mentions. Taking back your own last edit is the viewer's, not the server's.</p></div>
 <div class="feature-card"><div class="icon">🧳</div><h3>ArcGIS Migration</h3><p>Verne inventories a KML/KMZ, Esri file geodatabase, or hosted ArcGIS feature service and reports, item by item, what GeoLang holds faithfully, approximates, or has no home for. It then extracts features, semantics, and attachments and loads them into the geodatabase. The source is never written to.</p></div>
 <div class="feature-card"><div class="icon">🔬</div><h3>Geoprocessing</h3><p>Ptolemy runs clip, intersect, difference, dissolve, spatial join, voronoi, convex hull, centroid, nearest neighbour, distance matrix, contour, merge, split, simplify and densify on a branch, and buffer as an analytics route. Geodukt's REST service exposes buffer, centroid, clip, dissolve, and simplify as GP-as-a-service.</p></div>
 <div class="feature-card"><div class="icon">🌐</div><h3>3D Tiles</h3><p>TileTopia tiles point clouds, meshes (glTF, glb, OBJ, FBX, CityGML) and IFC with its own tiler, and GeoJSON, GeoPackage and KML through mago-3d-tiler. Quantized-mesh terrain from a DEM or a prebuilt bundle. IFC tiles carry each element's GlobalId, so a picked tile feature reads its id back. DAE is the one format neither tiler takes.</p></div>
 <div class="feature-card"><div class="icon">🚗</div><h3>Routing &amp; Network Analysis</h3><p>Shortest path, isochrones, network graph analytics (OD matrix, centrality, connected components). OpenStreetMap-powered.</p></div>
-<div class="feature-card"><div class="icon">📡</div><h3>Field Collection</h3><p>Collecta is the server: XLSForm import, 20 field types, SQLite persistence, an offline sync queue in the CLI client, and media attachments. ODK Collect fills the forms in over an OpenRosa layer, and publishing a form writes its submissions into a Ptolemy dataset. A field app of our own is on the roadmap.</p></div>
-<div class="feature-card"><div class="icon">📱</div><h3>Mobile SDK</h3><p>Rust-native mobile SDK. The Android library fetches tiles over HTTP and draws on Canvas, including MVT. Metal/Vulkan backends are on the roadmap.</p></div>
+<div class="feature-card"><div class="icon">📡</div><h3>Field Collection</h3><p>Collecta is the server: XLSForm import, 21 field types, SQLite persistence, an offline sync queue in the CLI client, and media attachments. ODK Collect fills the forms in over an OpenRosa layer, and publishing a form writes its submissions into a Ptolemy dataset. A field app of our own is on the roadmap.</p></div>
+<div class="feature-card"><div class="icon">📱</div><h3>Mobile SDK</h3><p>Rust-native mobile SDK, Android only. The Android library fetches tiles over HTTP and draws on Canvas, including MVT. There is no GPU backend and no iOS binding.</p></div>
 <div class="feature-card"><div class="icon">🛰️</div><h3>EO &amp; Remote Sensing</h3><p>COG streaming, EO time-series analysis (composites, trend fitting, change detection, anomaly scores, phenology). Panoptes segments imagery through ONNX Runtime. Building weights are published as a release asset. Roads, vegetation and landcover have none and run a threshold heuristic instead.</p></div>
 <div class="feature-card"><div class="icon">📊</div><h3>Portal &amp; Dashboards</h3><p>Content catalog for maps, layers, and datasets. Configurable dashboards with map, chart, indicator, gauge, list, and rich-text widgets.</p></div>
-<div class="feature-card"><div class="icon">📐</div><h3>WASM Computational Geometry</h3><p>Topoi WASM SDK — convex hull, Delaunay, buffer, clip, simplify, and spatial predicates running in the browser at near-native speed.</p></div>
+<div class="feature-card"><div class="icon">📐</div><h3>WASM Computational Geometry</h3><p>Topoi compiles to WASM: convex hull, Delaunay, buffer, clip, simplify, and spatial predicates, all exported to the browser.</p></div>
 <div class="feature-card"><div class="icon">📈</div><h3>Geostatistics</h3><p>Variogram modeling (spherical, exponential, gaussian), Ordinary Kriging, Moran's I spatial autocorrelation, Getis-Ord Gi* hot-spot analysis.</p></div>
 </div>
 </div>
@@ -209,12 +206,12 @@ footer{padding:40px 0;border-top:1px solid var(--border);text-align:center;color
 <a class="stack-item" href="https://geolang.github.io/agora"><span class="emoji">🤝</span><div><div class="name">Agora</div><div class="desc">Live map collaboration</div></div></a>
 <a class="stack-item" href="https://geolang.github.io/verne"><span class="emoji">🧳</span><div><div class="name">Verne</div><div class="desc">Migration from ArcGIS, KML, file geodatabases</div></div></a>
 <a class="stack-item" href="https://geolang.github.io/projicio"><span class="emoji">📐</span><div><div class="name">Projicio</div><div class="desc">CRS transforms</div></div></a>
-<a class="stack-item" href="https://geolang.github.io/jung"><span class="emoji">🖨️</span><div><div class="name">Jung</div><div class="desc">Cartographic rendering + print</div></div></a>
+<a class="stack-item" href="https://geolang.github.io/jung"><span class="emoji">🖨️</span><div><div class="name">Jung</div><div class="desc">Cartographic rendering + symbology</div></div></a>
 <a class="stack-item" href="https://geolang.github.io/geogit"><span class="emoji">📜</span><div><div class="name">GeoGit</div><div class="desc">Versioned geodata</div></div></a>
 <a class="stack-item" href="https://geolang.github.io/topoi"><span class="emoji">📐</span><div><div class="name">Topoi</div><div class="desc">Computational geometry + WASM</div></div></a>
 <a class="stack-item" href="https://geolang.github.io/interiora"><span class="emoji">🏢</span><div><div class="name">Interiora</div><div class="desc">Indoor mapping</div></div></a>
 <a class="stack-item" href="https://geolang.github.io/collecta"><span class="emoji">📋</span><div><div class="name">Collecta</div><div class="desc">Field data collection</div></div></a>
-<a class="stack-item" href="https://geolang.github.io/terravista"><span class="emoji">📱</span><div><div class="name">TerraVista</div><div class="desc">Mobile SDK (camera, cache, routing)</div></div></a>
+<a class="stack-item" href="https://geolang.github.io/terravista"><span class="emoji">📱</span><div><div class="name">TerraVista</div><div class="desc">Android SDK (camera, tile cache, navigation)</div></div></a>
 <a class="stack-item" href="https://geolang.github.io/fenestra"><span class="emoji">🌐</span><div><div class="name">Fenestra</div><div class="desc">OGC WMS/WFS/WMTS + server-side rendering</div></div></a>
 <a class="stack-item" href="https://github.com/GeoLang/geolang"><span class="emoji">🤖</span><div><div class="name">GeoLang</div><div class="desc">AI agent</div></div></a>
 <a class="stack-item" href="https://github.com/GeoLang/sibyl"><span class="emoji">🔮</span><div><div class="name">Sibyl</div><div class="desc">LLM agent loop + sessions</div></div></a>

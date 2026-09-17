@@ -195,7 +195,7 @@ ptolemy import --branch &lt;id&gt; parcels.geojson --author admin</code></pre>
 </div>
 
 <h3>Style migration</h3>
-<p>Mapbox GL styles are JSON objects. GeoLang's ViewTopia uses MapLibre GL which is 100% compatible with Mapbox GL styles. Simply:</p>
+<p>Mapbox GL styles are JSON objects. ViewTopia uses MapLibre GL, whose style spec forked from Mapbox's, so a style written for Mapbox GL JS v1 loads unchanged. The two have diverged since, so a style built on later Mapbox features needs checking.</p>
 <ol>
 <li>Export your style JSON from Mapbox Studio</li>
 <li>Replace <code>mapbox://</code> tile URLs with your TileTopia URLs</li>
