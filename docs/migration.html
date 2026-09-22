@@ -226,7 +226,7 @@ curl -H "Authorization: Bearer ptk_019..." http://localhost:3000/api/v1/datasets
 <h3>JWT Authentication</h3>
 <pre><code># One HS256 secret signs {sub, exp, role} tokens for every service, so a
 # user is one subject across the platform. Ptolemy reads it as:
-export PTOLEMY_JWT_SECRET="32+ bytes, required to serve"
+export PLATFORM_JWT_SECRET="32+ bytes, required to serve"
 
 # The platform compose passes the same value as PLATFORM_JWT_SECRET to
 # every other service. Tokens come from an OIDC callback
