@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Migration Guide — GeoLang</title>
+<title>Migration Guide - GeoLang</title>
 <meta name="description" content="Migrate from GeoServer, ArcGIS, Mapbox, or other GIS platforms to GeoLang.">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
@@ -58,11 +58,11 @@ footer{padding:40px 0;border-top:1px solid var(--border);margin-top:80px;text-al
 <h3>What maps to what</h3>
 <table>
 <tr><th>GeoServer Concept</th><th>GeoLang Equivalent</th></tr>
-<tr><td>Workspace</td><td>Ptolemy Dataset</td></tr>
-<tr><td>Layer / FeatureType</td><td>Ptolemy Branch (versioned layer)</td></tr>
-<tr><td>DataStore (PostGIS)</td><td>Ptolemy Storage (PostGIS-backed)</td></tr>
-<tr><td>SLD Styles</td><td>Ptolemy Cartography / Fenestra Styles</td></tr>
-<tr><td>WMS/WFS endpoints</td><td>Fenestra OGC API</td></tr>
+<tr><td>Workspace</td><td>Ptolemy project (datasets grouped under member roles)</td></tr>
+<tr><td>Layer / FeatureType</td><td>Ptolemy dataset, served by Fenestra as one layer, versioned in branches</td></tr>
+<tr><td>DataStore (PostGIS)</td><td>Ptolemy's own PostGIS database</td></tr>
+<tr><td>SLD Styles</td><td>No stored styles. Fenestra renders a GetMap with the SLD passed in <code>SLD_BODY</code> or <code>SLD</code></td></tr>
+<tr><td>WMS/WFS endpoints</td><td>Fenestra: WMS, WFS, WMTS, WCS, OGC API Features and Tiles</td></tr>
 <tr><td>GeoWebCache tiles</td><td>TileTopia (3D Tiles, terrain, PMTiles vector tiles)</td></tr>
 </table>
 </div>
@@ -173,7 +173,7 @@ ogr2ogr -f GeoJSON parcels.geojson input.gdb parcels
 ogr2ogr -f GPKG export.gpkg input.gdb</code></pre>
 
 <h3>Import into GeoLang</h3>
-<pre><code># Same as above — create dataset, branch, then import
+<pre><code># Same as above: create a dataset and a branch, then import
 ptolemy dataset create "parcels" --srid 4326 --geometry-type polygon --created-by admin
 ptolemy branch create --dataset &lt;id&gt; "main" --created-by admin
 ptolemy import --branch &lt;id&gt; parcels.geojson --author admin</code></pre>
@@ -189,7 +189,7 @@ ptolemy import --branch &lt;id&gt; parcels.geojson --author admin</code></pre>
 <tr><td>Mapbox Tiling Service</td><td>TileTopia</td></tr>
 <tr><td>Mapbox Geocoding</td><td>Geokode</td></tr>
 <tr><td>Mapbox Directions</td><td>Itinera</td></tr>
-<tr><td>Mapbox Studio Styles</td><td>Ptolemy Cartography API</td></tr>
+<tr><td>Mapbox Studio Styles</td><td>No style editor. ViewTopia loads MapLibre style JSON, and Ptolemy serves a stored Esri style as Mapbox GL layers</td></tr>
 <tr><td>Mapbox Datasets</td><td>Ptolemy Datasets + Branches</td></tr>
 </table>
 </div>
@@ -246,7 +246,7 @@ curl -X POST http://localhost:3000/api/v1/datasets/&lt;id&gt;/webhooks \
 
 <h2 id="backup">Backup & Restore</h2>
 
-<pre><code># Backup (custom format — recommended for pg_restore)
+<pre><code># Backup in custom format, restorable with ptolemy restore
 ptolemy backup --custom dump.backup
 
 # Backup (plain SQL)
