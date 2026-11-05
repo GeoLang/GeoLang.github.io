@@ -116,7 +116,7 @@ footer{padding:40px 0;border-top:1px solid var(--border);margin-top:80px;text-al
 │                    Libraries and command lines                      │
 │                                                                     │
 │  topoi (geometry)      projicio (CRS)      terrano (raster)         │
-│  nubis (point clouds)  jung (cartography)  fluvius (streams)        │
+│  nubis (point clouds)  jung (cartography)  fluvius (streams, CLI)   │
 │  panoptes (imagery ML) geogit (geodata VCS, CLI)                    │
 │  verne (foreign-format migration, CLI)                              │
 │  terravista (mobile SDK, Android over a C FFI)                      │
@@ -156,10 +156,10 @@ footer{padding:40px 0;border-top:1px solid var(--border);margin-top:80px;text-al
 <tr><td><a href="https://github.com/GeoLang/terrano">terrano</a></td><td>Raster algebra, terrain analysis, and contour generation</td><td><span class="badge badge-yellow">Library</span></td><td><a href="https://geolang.github.io/terrano/">API</a></td></tr>
 <tr><td><a href="https://github.com/GeoLang/ptolemy">ptolemy</a></td><td>Versioned PostGIS feature store with branch, diff, merge, audit, and spatial APIs</td><td><span class="badge badge-purple">Server</span></td><td><a href="https://geolang.github.io/ptolemy/">API</a></td></tr>
 <tr><td><a href="https://github.com/GeoLang/geodukt">geodukt</a></td><td>Validated, lineage-tracked geospatial pipeline manifests, run over HTTP or from the CLI</td><td><span class="badge badge-purple">Server</span></td><td><a href="https://geolang.github.io/geodukt/">API</a></td></tr>
-<tr><td><a href="https://github.com/GeoLang/geoplumb">geoplumb</a></td><td>Pull-based windowed compute over COG, STAC, GeoJSON, and LAS sources, served as XYZ tiles with zonal statistics</td><td><span class="badge badge-purple">Server</span></td><td>n/a</td></tr>
-<tr><td><a href="https://github.com/GeoLang/geogit">geogit</a></td><td>Geospatial data versioning and diff</td><td><span class="badge badge-yellow">Library</span></td><td><a href="https://geolang.github.io/geogit/">API</a></td></tr>
+<tr><td><a href="https://github.com/GeoLang/geoplumb">geoplumb</a></td><td>Pull-based windowed compute over raster, vector, and point cloud chunks from COG, STAC, GDAL, GeoJSON, GeoPackage, LAS, and COPC sources, served as XYZ tiles with zonal statistics</td><td><span class="badge badge-purple">Server</span></td><td>n/a</td></tr>
+<tr><td><a href="https://github.com/GeoLang/geogit">geogit</a></td><td>Geospatial data versioning and diff</td><td><span class="badge badge-yellow">CLI</span></td><td><a href="https://geolang.github.io/geogit/">API</a></td></tr>
 <tr><td><a href="https://github.com/GeoLang/jung">jung</a></td><td>Cartographic rendering + symbology engine</td><td><span class="badge badge-yellow">Library</span></td><td><a href="https://geolang.github.io/jung/">API</a></td></tr>
-<tr><td><a href="https://github.com/GeoLang/fluvius">fluvius</a></td><td>Real-time geospatial stream processing (GPS, IoT, telemetry)</td><td><span class="badge badge-yellow">Library</span></td><td><a href="https://geolang.github.io/fluvius/">API</a></td></tr>
+<tr><td><a href="https://github.com/GeoLang/fluvius">fluvius</a></td><td>Real-time geospatial stream processing (GPS, IoT, telemetry)</td><td><span class="badge badge-yellow">CLI</span></td><td><a href="https://geolang.github.io/fluvius/">API</a></td></tr>
 <tr><td><a href="https://github.com/GeoLang/panoptes">panoptes</a></td><td>AI feature extraction from satellite and aerial imagery</td><td><span class="badge badge-yellow">Library</span></td><td><a href="https://geolang.github.io/panoptes/">API</a></td></tr>
 <tr><td><a href="https://github.com/GeoLang/projicio">projicio</a></td><td>Coordinate projection and datum transformation</td><td><span class="badge badge-yellow">Library</span></td><td><a href="https://geolang.github.io/projicio/">API</a></td></tr>
 <tr><td><a href="https://github.com/GeoLang/topoi">topoi</a></td><td>Computational geometry: hull, Delaunay, predicates, simplification</td><td><span class="badge badge-yellow">Library</span></td><td><a href="https://geolang.github.io/topoi/">API</a></td></tr>
@@ -202,11 +202,11 @@ footer{padding:40px 0;border-top:1px solid var(--border);margin-top:80px;text-al
 
 <h3>Templates &amp; Governance</h3>
 <ul>
-<li><strong>CONTRIBUTING.md</strong>: Standard contribution workflow</li>
-<li><strong>CODE_OF_CONDUCT.md</strong>: Contributor Covenant v2.1</li>
-<li><strong>Issue templates</strong>: Bug reports and feature requests</li>
-<li><strong>PR template</strong>: Description, changes, testing checklist</li>
-<li><strong>CHANGELOG.md</strong>: Keep a Changelog format with semantic versioning</li>
+<li><strong>CONTRIBUTING.md</strong>: Standard contribution workflow. agora, geolang, geoplumb, sibyl, infrastructure, renovate-config, and GeoLang.github.io have no copy and use the organization default in <a href="https://github.com/GeoLang/.github">.github</a>. proj4rs, a fork outside the map above, uses the CONTRIBUTING.md at its root</li>
+<li><strong>CODE_OF_CONDUCT.md</strong>: Contributor Covenant v2.1, with the same organization default for the same repositories and for proj4rs</li>
+<li><strong>Issue templates</strong>: Bug reports and feature requests, in the repositories in the map except agora, geolang, geoplumb, sibyl, and verne. The organization has no default templates</li>
+<li><strong>PR template</strong>: Description, changes, testing checklist, in the same repositories as the issue templates</li>
+<li><strong>CHANGELOG.md</strong>: Every repository in the map has one, and all but geoplumb have an <code>[Unreleased]</code> section. Keep a Changelog and semantic versioning are named in seven of them</li>
 </ul>
 
 <h2 id="development">Development Guide</h2>
@@ -302,7 +302,7 @@ cargo llvm-cov --all-features --workspace --lcov --output-path lcov.info
 <ul>
 <li><strong>License compliance</strong>: Only pre-approved FOSS licenses</li>
 <li><strong>Advisory database</strong>: RUSTSEC vulnerability checks (informational in CI)</li>
-<li><strong>Source verification</strong>: Only crates.io registry, no unknown git sources</li>
+<li><strong>Source verification</strong>: Registries other than crates.io fail the check. Git sources outside <code>allow-git</code> and <code>allow-org</code> print a warning and do not fail it</li>
 <li><strong>Ban detection</strong>: Warns on duplicate crate versions in dependency tree</li>
 </ul>
 
